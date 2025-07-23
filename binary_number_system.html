@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Numeración Binario</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .binary-switch {
+            width: 60px;
+            height: 30px;
+            background: #ccc;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .binary-switch.on {
+            background: var(--success-color);
+        }
+
+        .binary-switch::after {
+            content: '';
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .binary-switch.on::after {
+            left: 32px;
+        }
+
+        .position-table {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .position-cell {
+            text-align: center;
+            padding: 10px;
+            border: 2px solid white;
+            margin: 2px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: var(--warning-color) !important;
+            color: black !important;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .slide-number {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            z-index: 1000;
+        }
+
+        .interactive-demo {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            border: 3px dashed var(--secondary-color);
+        }
+
+        .conversion-step {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+
+        .binary-digit {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: inline-block;
+            margin: 0 5px;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .lightbulb {
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbulb.off {
+            color: #bdc3c7;
+        }
+
+        .lightbulb.on {
+            color: #f1c40f;
+            text-shadow: 0 0 20px #f1c40f;
+        }
+
+        .quiz-option {
+            background: #ecf0f1;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .quiz-option.correct {
+            background: var(--success-color);
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .quiz-option.incorrect {
+            background: var(--accent-color);
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .title-animation {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--success-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="slide-number" id="slideNumber">1 / 12</div>
+
+    <!-- Slide 1: Título -->
+    <div class="slide active">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content text-center">
+                        <div class="title-animation">
+                            <h1 class="display-3 mb-4" style="color: var(--primary-color);">
+                                <i class="fas fa-microchip me-3"></i>
+                                Sistema de Numeración Binario
+                            </h1>
+                            <h2 class="display-6 text-muted mb-4">El Lenguaje Secreto de las Computadoras</h2>
+                            
+                            <div class="row mt-5">
+                                <div class="col-md-6">
+                                    <div class="p-4 border rounded-3 bg-light">
+                                        <h4><i class="fas fa-user-tie text-primary"></i> Docente</h4>
+                                        <p class="h5">Edilson Byron Laura Mercado</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-4 border rounded-3 bg-light">
+                                        <h4><i class="fas fa-university text-primary"></i> Institución</h4>
+                                        <p class="h5">Universidad Adventista de Bolivia</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-5">
+                                <h4><i class="fas fa-book text-success"></i> Sistemas Digitales I</h4>
+                                <div class="mt-4">
+                                    <span class="binary-digit">1</span>
+                                    <span class="binary-digit">0</span>
+                                    <span class="binary-digit">1</span>
+                                    <i class="fas fa-arrow-right mx-3 text-secondary"></i>
+                                    <span class="h3 text-primary">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: La Gran Pregunta -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--accent-color);">
+                            <i class="fas fa-question-circle me-3"></i>La Gran Pregunta
+                        </h2>
+                        
+                        <div class="interactive-demo text-center">
+                            <h3 class="mb-4">¿Cómo puede tu smartphone...</h3>
+                            
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-4">
+                                    <div class="p-3 border rounded-3 bg-white h-100">
+                                        <i class="fas fa-camera fa-3x text-primary mb-3"></i>
+                                        <h5>Mostrar tus fotos</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 border rounded-3 bg-white h-100">
+                                        <i class="fas fa-music fa-3x text-success mb-3"></i>
+                                        <h5>Reproducir música</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 border rounded-3 bg-white h-100">
+                                        <i class="fas fa-microphone fa-3x text-warning mb-3"></i>
+                                        <h5>Entender tu voz</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-primary mb-4">...cuando solo entiende de:</h3>
+                            
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-around align-items-center p-4 bg-dark text-white rounded-3">
+                                        <div class="text-center">
+                                            <i class="fas fa-toggle-off fa-3x text-danger"></i>
+                                            <h5 class="mt-2">Electricidad APAGADA</h5>
+                                        </div>
+                                        <div class="text-center">
+                                            <i class="fas fa-toggle-on fa-3x text-success"></i>
+                                            <h5 class="mt-2">Electricidad ENCENDIDA</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: La Analogía del Interruptor -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--warning-color);">
+                            <i class="fas fa-lightbulb me-3"></i>La Analogía Clave: El Interruptor
+                        </h2>
+                        
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="interactive-demo text-center">
+                                    <h3 class="mb-4">¡Haz clic en las bombillas!</h3>
+                                    
+                                    <div class="row g-4 mb-4">
+                                        <div class="col-md-6">
+                                            <div class="p-4 border rounded-3 bg-light">
+                                                <i class="fas fa-lightbulb lightbulb off" onclick="toggleBulb(this, 0)"></i>
+                                                <h4 class="mt-3">APAGADO (OFF)</h4>
+                                                <h2 class="text-danger" id="value0">0</h2>
+                                                <p>No hay luz, no hay energía</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-4 border rounded-3 bg-light">
+                                                <i class="fas fa-lightbulb lightbulb off" onclick="toggleBulb(this, 1)"></i>
+                                                <h4 class="mt-3">ENCENDIDO (ON)</h4>
+                                                <h2 class="text-success" id="value1">0</h2>
+                                                <p>Hay luz, hay energía</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-info mt-4">
+                                        <h5><i class="fas fa-info-circle me-2"></i>Conclusión:</h5>
+                                        <p class="mb-0">Las computadoras son, en su nivel más básico, <strong>miles de millones de interruptores</strong> increíblemente pequeños. Todo lo que hacen, lo hacen usando solo estos dos estados: <strong>0 y 1</strong>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Objetivos -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--primary-color);">
+                            <i class="fas fa-bullseye me-3"></i>Objetivos de Aprendizaje
+                        </h2>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="interactive-demo h-100">
+                                    <div class="text-center mb-4">
+                                        <i class="fas fa-language fa-4x text-primary"></i>
+                                        <h3 class="mt-3">Nos convertiremos en...</h3>
+                                        <h2 class="text-primary">TRADUCTORES</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="interactive-demo h-100">
+                                    <h4 class="text-center mb-4">Aprenderemos a traducir:</h4>
+                                    
+                                    <div class="conversion-step">
+                                        <i class="fas fa-arrow-right me-2"></i>
+                                        Números decimales → Binarios
+                                    </div>
+                                    
+                                    <div class="conversion-step">
+                                        <i class="fas fa-arrow-left me-2"></i>
+                                        Números binarios → Decimales
+                                    </div>
+                                    
+                                    <div class="conversion-step">
+                                        <i class="fas fa-plus me-2"></i>
+                                        Operaciones básicas en binario
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-success mt-4 text-center">
+                            <h4><i class="fas fa-graduation-cap me-2"></i>Al final de esta clase podrás:</h4>
+                            <p class="mb-0">Comprender, convertir y operar con números en el sistema binario, reconociendo su importancia fundamental en los sistemas digitales.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: El Secreto está en la Base -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--secondary-color);">
+                            <i class="fas fa-key me-3"></i>El Secreto está en la Base
+                        </h2>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="interactive-demo">
+                                    <h3 class="text-center text-primary mb-4">Sistema Decimal (Base 10)</h3>
+                                    <div class="text-center mb-3">
+                                        <h2>345</h2>
+                                        <p>¿Qué significa realmente?</p>
+                                    </div>
+                                    
+                                    <div class="position-table">
+                                        <div class="row g-1">
+                                            <div class="col-4 position-cell">3 × 10²</div>
+                                            <div class="col-4 position-cell">4 × 10¹</div>
+                                            <div class="col-4 position-cell">5 × 10⁰</div>
+                                        </div>
+                                        <div class="row g-1 mt-2">
+                                            <div class="col-4 position-cell">3 × 100</div>
+                                            <div class="col-4 position-cell">4 × 10</div>
+                                            <div class="col-4 position-cell">5 × 1</div>
+                                        </div>
+                                        <div class="row g-1 mt-2">
+                                            <div class="col-4 position-cell">300</div>
+                                            <div class="col-4 position-cell">40</div>
+                                            <div class="col-4 position-cell">5</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <h4>300 + 40 + 5 = 345</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="interactive-demo">
+                                    <h3 class="text-center text-success mb-4">Sistema Binario (Base 2)</h3>
+                                    <div class="text-center mb-3">
+                                        <h2>Las posiciones valen potencias de 2</h2>
+                                    </div>
+                                    
+                                    <div class="position-table">
+                                        <div class="row g-1 text-xs">
+                                            <div class="col position-cell small">2⁷<br>128</div>
+                                            <div class="col position-cell small">2⁶<br>64</div>
+                                            <div class="col position-cell small">2⁵<br>32</div>
+                                            <div class="col position-cell small">2⁴<br>16</div>
+                                            <div class="col position-cell small">2³<br>8</div>
+                                            <div class="col position-cell small">2²<br>4</div>
+                                            <div class="col position-cell small">2¹<br>2</div>
+                                            <div class="col position-cell small">2⁰<br>1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-4 text-center">
+                            <h5><i class="fas fa-lightbulb me-2"></i>¡Eureka!</h5>
+                            <p class="mb-0">En binario, solo usamos 0 y 1, y cada posición vale una potencia de 2.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Conversión Binario a Decimal -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--success-color);">
+                            <i class="fas fa-exchange-alt me-3"></i>De Binario a Decimal
+                        </h2>
+                        
+                        <div class="interactive-demo">
+                            <h3 class="text-center mb-4">Método: "Sumar las posiciones encendidas"</h3>
+                            
+                            <div class="row justify-content-center">
+                                <div class="col-md-10">
+                                    <h4 class="text-center mb-4">Ejemplo: 11010₂ → ?₁₀</h4>
+                                    
+                                    <div class="position-table">
+                                        <div class="row g-1 mb-2">
+                                            <div class="col position-cell">16</div>
+                                            <div class="col position-cell">8</div>
+                                            <div class="col position-cell">4</div>
+                                            <div class="col position-cell">2</div>
+                                            <div class="col position-cell">1</div>
+                                        </div>
+                                        <div class="row g-1" id="binaryDemo">
+                                            <div class="col position-cell highlight" onclick="togglePosition(this, 16)">1</div>
+                                            <div class="col position-cell highlight" onclick="togglePosition(this, 8)">1</div>
+                                            <div class="col position-cell" onclick="togglePosition(this, 4)">0</div>
+                                            <div class="col position-cell highlight" onclick="togglePosition(this, 2)">1</div>
+                                            <div class="col position-cell" onclick="togglePosition(this, 1)">0</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mt-4">
+                                        <h3>Posiciones "encendidas": 16 + 8 + 2 = <span class="text-success" id="total">26</span></h3>
+                                        <div class="alert alert-success mt-3">
+                                            <h4>¡Felicidades! 11010₂ = 26₁₀</h4>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4 text-center">
+                                        <button class="btn btn-primary btn-lg" onclick="newBinaryExample()">
+                                            <i class="fas fa-sync me-2"></i>Nuevo Ejemplo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Ejercicio Rápido 1 -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--warning-color);">
+                            <i class="fas fa-brain me-3"></i>Ejercicio Rápido #1
+                        </h2>
+                        
+                        <div class="interactive-demo text-center">
+                            <h3 class="mb-4">¿Cuánto vale 1011₂ en decimal?</h3>
+                            
+                            <div class="position-table mb-4">
+                                <div class="row g-1 mb-2">
+                                    <div class="col position-cell">8</div>
+                                    <div class="col position-cell">4</div>
+                                    <div class="col position-cell">2</div>
+                                    <div class="col position-cell">1</div>
+                                </div>
+                                <div class="row g-1">
+                                    <div class="col position-cell">1</div>
+                                    <div class="col position-cell">0</div>
+                                    <div class="col position-cell">1</div>
+                                    <div class="col position-cell">1</div>
+                                </div>
+                            </div>
+                            
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                        <h4>A) 13</h4>
+                                    </div>
+                                    <div class="quiz-option" onclick="selectAnswer(this, true)">
+                                        <h4>B) 11</h4>
+                                    </div>
+                                    <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                        <h4>C) 15</h4>
+                                    </div>
+                                    <div class="quiz-option" onclick="selectAnswer(this, false)">
+                                        <h4>D) 9</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="explanation" class="alert alert-info mt-4" style="display: none;">
+                                <h5>¡Correcto!</h5>
+                                <p>8 + 0 + 2 + 1 = 11</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Conversión Decimal a Binario -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--accent-color);">
+                            <i class="fas fa-magic me-3"></i>De Decimal a Binario
+                        </h2>
+                        
+                        <div class="interactive-demo">
+                            <h3 class="text-center mb-4">Método: "Divisiones sucesivas por 2"</h3>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="text-center mb-4">Ejemplo: 43₁₀ → ?₂</h4>
+                                    
+                                    <div id="divisionSteps">
+                                        <div class="conversion-step">43 ÷ 2 = 21, residuo: 1</div>
+                                        <div class="conversion-step">21 ÷ 2 = 10, residuo: 1</div>
+                                        <div class="conversion-step">10 ÷ 2 = 5, residuo: 0</div>
+                                        <div class="conversion-step">5 ÷ 2 = 2, residuo: 1</div>
+                                        <div class="conversion-step">2 ÷ 2 = 1, residuo: 0</div>
+                                        <div class="conversion-step">1 ÷ 2 = 0, residuo: 1</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h4 class="text-center mb-4">El Truco Final:</h4>
+                                    <div class="alert alert-warning">
+                                        <h5><i class="fas fa-exclamation-triangle me-2"></i>¡Muy Importante!</h5>
+                                        <p>Los residuos se leen de <strong>abajo hacia arriba</strong></p>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <h3>Resultado:</h3>
+                                        <div class="my-4">
+                                            <span class="binary-digit">1</span>
+                                            <span class="binary-digit">0</span>
+                                            <span class="binary-digit">1</span>
+                                            <span class="binary-digit">0</span>
+                                            <span class="binary-digit">1</span>
+                                            <span class="binary-digit">1</span>
+                                        </div>
+                                        <h4>43₁₀ = 101011₂</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success mt-4 text-center">
+                                <h5>Comprobación: 32 + 8 + 2 + 1 = 43 ✓</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Ejercicio Rápido 2 -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--warning-color);">
+                            <i class="fas fa-brain me-3"></i>Ejercicio Rápido #2
+                        </h2>
+                        
+                        <div class="interactive-demo text-center">
+                            <h3 class="mb-4">Convierte 19₁₀ a binario</h3>
+                            
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="mb-4">
+                                        <button class="btn btn-outline-primary btn-lg" onclick="showDivisionProcess()">
+                                            <i class="fas fa-calculator me-2"></i>Ver proceso de división
+                                        </button>
+                                    </div>
+                                    
+                                    <div id="divisionProcess" style="display: none;">
+                                        <div class="conversion-step">19 ÷ 2 = 9, residuo: 1</div>
+                                        <div class="conversion-step">9 ÷ 2 = 4, residuo: 1</div>
+                                        <div class="conversion-step">4 ÷ 2 = 2, residuo: 0</div>
+                                        <div class="conversion-step">2 ÷ 2 = 1, residuo: 0</div>
+                                        <div class="conversion-step">1 ÷ 2 = 0, residuo: 1</div>
+                                    </div>
+                                    
+                                    <div class="quiz-option" onclick="selectAnswerBinary(this, false)">
+                                        <h4>A) 10101₂</h4>
+                                    </div>
+                                    <div class="quiz-option" onclick="selectAnswerBinary(this, true)">
+                                        <h4>B) 10011₂</h4>
+                                    </div>
+                                    <div class="quiz-option" onclick="selectAnswerBinary(this, false)">
+                                        <h4>C) 11001₂</h4>
+                                    </div>
+                                    <div class="quiz-option" onclick="selectAnswerBinary(this, false)">
+                                        <h4>D) 10110₂</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="explanationBinary" class="alert alert-info mt-4" style="display: none;">
+                                <h5>¡Correcto!</h5>
+                                <p>Leyendo los residuos de abajo hacia arriba: 10011₂</p>
+                                <p>Comprobación: 16 + 2 + 1 = 19 ✓</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Calculadora Interactiva -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--secondary-color);">
+                            <i class="fas fa-calculator me-3"></i>Calculadora Binaria Interactiva
+                        </h2>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="interactive-demo">
+                                    <h4 class="text-center mb-4">Decimal → Binario</h4>
+                                    <div class="mb-3">
+                                        <input type="number" class="form-control form-control-lg text-center" 
+                                               id="decimalInput" placeholder="Ingresa un número decimal" 
+                                               oninput="convertToBinary()">
+                                    </div>
+                                    <div class="text-center">
+                                        <h3>Resultado:</h3>
+                                        <div class="p-3 bg-light rounded-3">
+                                            <h2 id="binaryResult" class="text-primary">?</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="interactive-demo">
+                                    <h4 class="text-center mb-4">Binario → Decimal</h4>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control form-control-lg text-center" 
+                                               id="binaryInput" placeholder="Ingresa un número binario" 
+                                               oninput="convertToDecimal()" pattern="[01]*">
+                                    </div>
+                                    <div class="text-center">
+                                        <h3>Resultado:</h3>
+                                        <div class="p-3 bg-light rounded-3">
+                                            <h2 id="decimalResult" class="text-success">?</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-warning btn-lg me-3" onclick="randomExample()">
+                                <i class="fas fa-dice me-2"></i>Ejemplo Aleatorio
+                            </button>
+                            <button class="btn btn-secondary btn-lg" onclick="clearCalculator()">
+                                <i class="fas fa-eraser me-2"></i>Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Suma Binaria -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--success-color);">
+                            <i class="fas fa-plus me-3"></i>Sumando como una Computadora
+                        </h2>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="interactive-demo">
+                                    <h4 class="text-center mb-4">Reglas de la Suma Binaria</h4>
+                                    
+                                    <div class="position-table">
+                                        <div class="row g-1 mb-2">
+                                            <div class="col-3 position-cell">0 + 0</div>
+                                            <div class="col-3 position-cell">=</div>
+                                            <div class="col-6 position-cell">0</div>
+                                        </div>
+                                        <div class="row g-1 mb-2">
+                                            <div class="col-3 position-cell">0 + 1</div>
+                                            <div class="col-3 position-cell">=</div>
+                                            <div class="col-6 position-cell">1</div>
+                                        </div>
+                                        <div class="row g-1 mb-2">
+                                            <div class="col-3 position-cell">1 + 0</div>
+                                            <div class="col-3 position-cell">=</div>
+                                            <div class="col-6 position-cell">1</div>
+                                        </div>
+                                        <div class="row g-1">
+                                            <div class="col-3 position-cell highlight">1 + 1</div>
+                                            <div class="col-3 position-cell">=</div>
+                                            <div class="col-6 position-cell highlight">0 (llevo 1)</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning mt-3">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <strong>¡Atención!</strong> 1 + 1 = 10 en binario (0 y llevo 1)
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="interactive-demo">
+                                    <h4 class="text-center mb-4">Ejemplo: 101₂ + 110₂</h4>
+                                    
+                                    <div class="text-center mb-4">
+                                        <p class="text-muted">101₂ = 5₁₀ y 110₂ = 6₁₀</p>
+                                    </div>
+                                    
+                                    <div class="position-table">
+                                        <div class="row g-1 mb-1">
+                                            <div class="col position-cell small text-muted">Acarreo:</div>
+                                            <div class="col position-cell small">1</div>
+                                            <div class="col position-cell small">1</div>
+                                            <div class="col position-cell small"></div>
+                                        </div>
+                                        <div class="row g-1 mb-1">
+                                            <div class="col position-cell"></div>
+                                            <div class="col position-cell">1</div>
+                                            <div class="col position-cell">0</div>
+                                            <div class="col position-cell">1</div>
+                                        </div>
+                                        <div class="row g-1 mb-1">
+                                            <div class="col position-cell">+</div>
+                                            <div class="col position-cell">1</div>
+                                            <div class="col position-cell">1</div>
+                                            <div class="col position-cell">0</div>
+                                        </div>
+                                        <div class="row g-1">
+                                            <div class="col position-cell">-</div>
+                                            <div class="col position-cell">-</div>
+                                            <div class="col position-cell">-</div>
+                                            <div class="col position-cell">-</div>
+                                        </div>
+                                        <div class="row g-1">
+                                            <div class="col position-cell highlight">1</div>
+                                            <div class="col position-cell highlight">0</div>
+                                            <div class="col position-cell highlight">1</div>
+                                            <div class="col position-cell highlight">1</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mt-3">
+                                        <h4>Resultado: 1011₂</h4>
+                                        <p class="text-success">Verificación: 1011₂ = 8+2+1 = 11₁₀ ✓</p>
+                                        <p class="text-muted">5 + 6 = 11 ✓</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Resumen y Conclusiones -->
+    <div class="slide">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="slide-content">
+                        <h2 class="display-4 text-center mb-5" style="color: var(--primary-color);">
+                            <i class="fas fa-trophy me-3"></i>¡Lo Logramos!
+                        </h2>
+                        
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-4">
+                                <div class="interactive-demo text-center h-100">
+                                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                                    <h4>Aprendimos el "idioma" de las computadoras</h4>
+                                    <p>Solo 0s y 1s, pero infinitas posibilidades</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="interactive-demo text-center h-100">
+                                    <i class="fas fa-exchange-alt fa-3x text-primary mb-3"></i>
+                                    <h4>Dominamos las conversiones</h4>
+                                    <p>Decimal ↔ Binario sin problemas</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="interactive-demo text-center h-100">
+                                    <i class="fas fa-calculator fa-3x text-warning mb-3"></i>
+                                    <h4>Operamos en binario</h4>
+                                    <p>Sumamos como las computadoras</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-success text-center mb-4">
+                            <h3><i class="fas fa-lightbulb me-2"></i>Recuerda siempre:</h3>
+                            <p class="h5 mb-0">Cada tecnología que usas diariamente funciona gracias a este simple pero poderoso sistema binario</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <h3 class="mb-4">Tu smartphone, tu computadora, Internet...</h3>
+                            <div class="mb-4">
+                                <span class="binary-digit">1</span>
+                                <span class="binary-digit">0</span>
+                                <span class="binary-digit">1</span>
+                                <span class="binary-digit">1</span>
+                                <span class="binary-digit">0</span>
+                                <span class="binary-digit">0</span>
+                                <span class="binary-digit">1</span>
+                                <span class="binary-digit">1</span>
+                            </div>
+                            <h2 class="text-primary">¡Todo es binario!</h2>
+                            
+                            <div class="mt-5">
+                                <h4>¿Preguntas?</h4>
+                                <p class="text-muted">Edilson Byron Laura Mercado<br>Universidad Adventista de Bolivia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="btn btn-secondary me-2" onclick="previousSlide()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="btn btn-primary" onclick="nextSlide()">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 12;
+        
+        function updateSlideNumber() {
+            document.getElementById('slideNumber').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n >= totalSlides) currentSlide = 0;
+            if (n < 0) currentSlide = totalSlides - 1;
+            
+            slides[currentSlide].classList.add('active');
+            updateSlideNumber();
+        }
+        
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+        
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+        
+        // Interactive functions
+        function toggleBulb(element, valueId) {
+            element.classList.toggle('on');
+            const isOn = element.classList.contains('on');
+            document.getElementById('value' + valueId).textContent = isOn ? '1' : '0';
+        }
+        
+        function togglePosition(element, value) {
+            element.classList.toggle('highlight');
+            updateTotal();
+        }
+        
+        function updateTotal() {
+            const highlighted = document.querySelectorAll('#binaryDemo .highlight');
+            let total = 0;
+            highlighted.forEach(cell => {
+                const text = cell.textContent;
+                if (text === '1') {
+                    const index = Array.from(cell.parentNode.children).indexOf(cell);
+                    const values = [16, 8, 4, 2, 1];
+                    total += values[index];
+                }
+            });
+            document.getElementById('total').textContent = total;
+        }
+        
+        function newBinaryExample() {
+            const examples = [
+                {binary: '1101', decimal: 13, positions: [1,1,0,1]},
+                {binary: '1010', decimal: 10, positions: [1,0,1,0]},
+                {binary: '1111', decimal: 15, positions: [1,1,1,1]},
+                {binary: '1001', decimal: 9, positions: [1,0,0,1]}
+            ];
+            
+            const example = examples[Math.floor(Math.random() * examples.length)];
+            const cells = document.querySelectorAll('#binaryDemo .position-cell');
+            
+            cells.forEach((cell, index) => {
+                cell.textContent = example.positions[index];
+                cell.classList.toggle('highlight', example.positions[index] === 1);
+            });
+            
+            updateTotal();
+        }
+        
+        function selectAnswer(element, isCorrect) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                if (option === element) {
+                    option.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            if (isCorrect) {
+                document.getElementById('explanation').style.display = 'block';
+            }
+        }
+        
+        function selectAnswerBinary(element, isCorrect) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                if (option === element) {
+                    option.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            if (isCorrect) {
+                document.getElementById('explanationBinary').style.display = 'block';
+            }
+        }
+        
+        function showDivisionProcess() {
+            document.getElementById('divisionProcess').style.display = 'block';
+        }
+        
+        function convertToBinary() {
+            const decimal = parseInt(document.getElementById('decimalInput').value);
+            if (isNaN(decimal) || decimal < 0) {
+                document.getElementById('binaryResult').textContent = '?';
+                return;
+            }
+            document.getElementById('binaryResult').textContent = decimal.toString(2) + '₂';
+        }
+        
+        function convertToDecimal() {
+            const binary = document.getElementById('binaryInput').value;
+            if (!/^[01]+$/.test(binary) || binary === '') {
+                document.getElementById('decimalResult').textContent = '?';
+                return;
+            }
+            document.getElementById('decimalResult').textContent = parseInt(binary, 2) + '₁₀';
+        }
+        
+        function randomExample() {
+            const randomDecimal = Math.floor(Math.random() * 255) + 1;
+            document.getElementById('decimalInput').value = randomDecimal;
+            convertToBinary();
+            
+            const randomBinary = randomDecimal.toString(2);
+            document.getElementById('binaryInput').value = randomBinary;
+            convertToDecimal();
+        }
+        
+        function clearCalculator() {
+            document.getElementById('decimalInput').value = '';
+            document.getElementById('binaryInput').value = '';
+            document.getElementById('binaryResult').textContent = '?';
+            document.getElementById('decimalResult').textContent = '?';
+        }
+        
+        // Initialize
+        updateSlideNumber();
+    </script>
+</body>
+</html>
