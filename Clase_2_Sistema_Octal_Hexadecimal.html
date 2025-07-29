@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas de Numeración y Operadores Lógicos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .class-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .info-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .content {
+            padding: 40px 20px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #3498db;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            font-size: 1.6em;
+            margin: 25px 0 15px 0;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .bases-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .base-card {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .base-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+        
+        .base-card h4 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+        
+        .base-card .base-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #3498db;
+            margin: 10px 0;
+        }
+        
+        .conversion-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .conversion-table th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .conversion-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .conversion-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .conversion-table tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .example-box {
+            background: linear-gradient(135deg, #fff3e0, #ffecb3);
+            border: 2px solid #ffb74d;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .example-box h4 {
+            color: #e65100;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .step-by-step {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            white-space: pre-line;
+        }
+        
+        .quick-conversion {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .conversion-method {
+            background: white;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .conversion-method h4 {
+            color: #27ae60;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .logic-operators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .operator-card {
+            background: white;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .operator-card h4 {
+            color: #e74c3c;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+        
+        .truth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        
+        .truth-table th, .truth-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .truth-table th {
+            background: #ecf0f1;
+            font-weight: bold;
+        }
+        
+        .equivalence-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 0.85em;
+        }
+        
+        .equivalence-table th {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .equivalence-table td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .nav-menu {
+            background: rgba(44, 62, 80, 0.9);
+            padding: 15px 20px;
+            top: 140px;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .section {
+                padding: 20px 15px;
+            }
+            
+            .class-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .conversion-table {
+                font-size: 0.8em;
+            }
+            
+            .equivalence-table {
+                font-size: 0.7em;
+            }
+            
+            .nav-menu {
+                top: 120px;
+            }
+        }
+        
+        .interactive-element {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .formula {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔢 Sistemas de Numeración y Operadores Lógicos</h1>
+            <div class="subtitle">Sistemas Digitales - Universidad Adventista de Bolivia</div>
+            
+            <div class="class-info">
+                <div class="info-card">
+                    <strong>👨‍🏫 Docente</strong><br>
+                    Edilson Laura Mercado
+                </div>
+                <div class="info-card">
+                    <strong>🎯 Objetivos</strong><br>
+                    Conversiones y Operadores
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-menu">
+            <div class="nav-links">
+                <a href="#bases">Bases Numéricas</a>
+                <a href="#conversiones">Conversiones</a>
+                <a href="#tabla-completa">Tabla Equivalencias</a>
+                <a href="#operadores">Operadores Lógicos</a>
+            </div>
+        </nav>
+
+        <div class="content">
+            <section id="bases" class="section">
+                <h2>🔢 Sistemas de Numeración</h2>
+                
+                <p style="font-size: 1.2em; text-align: center; margin-bottom: 30px; color: #34495e;">
+                    Comprender los diferentes sistemas de numeración es fundamental para entender cómo las computadoras procesan y almacenan información. Cada sistema tiene características únicas que lo hacen útil en diferentes contextos.
+                </p>
+
+                <div class="bases-overview">
+                    <div class="base-card">
+                        <h4>Decimal</h4>
+                        <div class="base-number">10</div>
+                        <p><strong>Dígitos:</strong> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9</p>
+                        <p><strong>Uso:</strong> Sistema cotidiano</p>
+                    </div>
+                    <div class="base-card">
+                        <h4>Binario</h4>
+                        <div class="base-number">2</div>
+                        <p><strong>Dígitos:</strong> 0, 1</p>
+                        <p><strong>Uso:</strong> Computadoras</p>
+                    </div>
+                    <div class="base-card">
+                        <h4>Octal</h4>
+                        <div class="base-number">8</div>
+                        <p><strong>Dígitos:</strong> 0, 1, 2, 3, 4, 5, 6, 7</p>
+                        <p><strong>Uso:</strong> Permisos UNIX</p>
+                    </div>
+                    <div class="base-card">
+                        <h4>Hexadecimal</h4>
+                        <div class="base-number">16</div>
+                        <p><strong>Dígitos:</strong> 0-9, A-F</p>
+                        <p><strong>Uso:</strong> Colores web, direcciones</p>
+                    </div>
+                </div>
+
+                <h3>🎯 ¿Por qué son importantes estos sistemas?</h3>
+                <p>Cada sistema de numeración tiene ventajas específicas en el mundo de la computación. El sistema binario es la base fundamental de toda computación digital, ya que representa perfectamente los estados ON/OFF de los circuitos electrónicos. El sistema octal facilita la representación de grupos de 3 bits, mientras que el hexadecimal permite representar grupos de 4 bits de manera más compacta y legible.</p>
+            </section>
+
+            <section id="conversiones" class="section">
+                <h2>🔄 Métodos de Conversión</h2>
+
+                <h3>🔸 Decimal a Otras Bases</h3>
+                
+                <div class="example-box">
+                    <h4>Ejemplo: Convertir 156₁₀ a diferentes bases</h4>
+                    
+                    <div class="quick-conversion">
+                        <div class="conversion-method">
+                            <h4>A Binario (Base 2)</h4>
+                            <div class="step-by-step">156 ÷ 2 = 78  residuo 0
+78 ÷ 2 = 39  residuo 0
+39 ÷ 2 = 19  residuo 1
+19 ÷ 2 = 9   residuo 1
+9 ÷ 2 = 4    residuo 1
+4 ÷ 2 = 2    residuo 0
+2 ÷ 2 = 1    residuo 0
+1 ÷ 2 = 0    residuo 1
+
+Resultado: 10011100₂</div>
+                        </div>
+                        
+                        <div class="conversion-method">
+                            <h4>A Octal (Base 8)</h4>
+                            <div class="step-by-step">156 ÷ 8 = 19  residuo 4
+19 ÷ 8 = 2   residuo 3
+2 ÷ 8 = 0    residuo 2
+
+Resultado: 234₈</div>
+                        </div>
+                        
+                        <div class="conversion-method">
+                            <h4>A Hexadecimal (Base 16)</h4>
+                            <div class="step-by-step">156 ÷ 16 = 9  residuo 12 (C)
+9 ÷ 16 = 0   residuo 9
+
+Resultado: 9C₁₆</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🔸 Conversiones Rápidas entre Binario, Octal y Hexadecimal</h3>
+                
+                <div class="interactive-element">
+                    <h4>🚀 Método de Agrupación</h4>
+                    <p>La clave está en que 8 = 2³ y 16 = 2⁴, lo que permite agrupar bits para conversiones rápidas.</p>
+                </div>
+
+                <div class="quick-conversion">
+                    <div class="conversion-method">
+                        <h4>Binario ↔️ Octal</h4>
+                        <p><strong>Regla:</strong> Agrupa de 3 en 3 bits desde la derecha</p>
+                        <div class="step-by-step">Ejemplo: 10011100₂ a Octal
+
+10|011|100₂
+ 2| 3 | 4 ₈
+
+Resultado: 234₈</div>
+                        <div class="formula">1 dígito octal = 3 bits</div>
+                    </div>
+                    
+                    <div class="conversion-method">
+                        <h4>Binario ↔️ Hexadecimal</h4>
+                        <p><strong>Regla:</strong> Agrupa de 4 en 4 bits desde la derecha</p>
+                        <div class="step-by-step">Ejemplo: 10011100₂ a Hexadecimal
+
+1001|1100₂
+  9 | C ₁₆
+
+Resultado: 9C₁₆</div>
+                        <div class="formula">1 dígito hexadecimal = 4 bits</div>
+                    </div>
+                </div>
+
+                <h3>🔸 Tabla de Equivalencias Hexadecimales</h3>
+                <table class="conversion-table">
+                    <tr>
+                        <th>Decimal</th><th>Binario</th><th>Hexadecimal</th>
+                        <th>Decimal</th><th>Binario</th><th>Hexadecimal</th>
+                    </tr>
+                    <tr><td>0</td><td>0000</td><td>0</td><td>8</td><td>1000</td><td>8</td></tr>
+                    <tr><td>1</td><td>0001</td><td>1</td><td>9</td><td>1001</td><td>9</td></tr>
+                    <tr><td>2</td><td>0010</td><td>2</td><td>10</td><td>1010</td><td>A</td></tr>
+                    <tr><td>3</td><td>0011</td><td>3</td><td>11</td><td>1011</td><td>B</td></tr>
+                    <tr><td>4</td><td>0100</td><td>4</td><td>12</td><td>1100</td><td>C</td></tr>
+                    <tr><td>5</td><td>0101</td><td>5</td><td>13</td><td>1101</td><td>D</td></tr>
+                    <tr><td>6</td><td>0110</td><td>6</td><td>14</td><td>1110</td><td>E</td></tr>
+                    <tr><td>7</td><td>0111</td><td>7</td><td>15</td><td>1111</td><td>F</td></tr>
+                </table>
+            </section>
+
+            <section id="tabla-completa" class="section">
+                <h2>📊 Tabla de Equivalencias Completa (0-255)</h2>
+                
+                <p style="text-align: center; margin-bottom: 20px; font-size: 1.1em; color: #34495e;">
+                    Esta tabla muestra las equivalencias entre las cuatro bases numéricas para todos los números del 0 al 255. 
+                    El número 255 es especialmente importante porque representa el valor máximo que se puede almacenar en un byte (8 bits).
+                </p>
+
+                <div style="overflow-x: auto;">
+                    <table class="equivalence-table">
+                        <thead>
+                            <tr>
+                                <th>Dec</th><th>Bin</th><th>Oct</th><th>Hex</th>
+                                <th>Dec</th><th>Bin</th><th>Oct</th><th>Hex</th>
+                                <th>Dec</th><th>Bin</th><th>Oct</th><th>Hex</th>
+                                <th>Dec</th><th>Bin</th><th>Oct</th><th>Hex</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equivalenceTableBody">
+                            <!-- La tabla se generará con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="operadores" class="section">
+                <h2>🧠 Operadores Lógicos y Lógica de Proposiciones</h2>
+                
+                <p style="font-size: 1.2em; text-align: center; margin-bottom: 30px; color: #34495e;">
+                    Los operadores lógicos son fundamentales en sistemas digitales y tienen una equivalencia directa con la lógica de proposiciones. Estos operadores permiten combinar y manipular valores booleanos (verdadero/falso o 1/0).
+                </p>
+
+                <div class="logic-operators">
+                    <div class="operator-card">
+                        <h4>AND (Y) - ∧</h4>
+                        <p><strong>Símbolo Digital:</strong> &</p>
+                        <p><strong>Descripción:</strong> Verdadero solo si ambas entradas son verdaderas</p>
+                        <table class="truth-table">
+                            <tr><th>A</th><th>B</th><th>A ∧ B</th></tr>
+                            <tr><td>0</td><td>0</td><td>0</td></tr>
+                            <tr><td>0</td><td>1</td><td>0</td></tr>
+                            <tr><td>1</td><td>0</td><td>0</td></tr>
+                            <tr><td>1</td><td>1</td><td>1</td></tr>
+                        </table>
+                        <p><em>Ejemplo:</em> "Llueve Y hace frío"</p>
+                    </div>
+
+                    <div class="operator-card">
+                        <h4>OR (O) - ∨</h4>
+                        <p><strong>Símbolo Digital:</strong> |</p>
+                        <p><strong>Descripción:</strong> Verdadero si al menos una entrada es verdadera</p>
+                        <table class="truth-table">
+                            <tr><th>A</th><th>B</th><th>A ∨ B</th></tr>
+                            <tr><td>0</td><td>0</td><td>0</td></tr>
+                            <tr><td>0</td><td>1</td><td>1</td></tr>
+                            <tr><td>1</td><td>0</td><td>1</td></tr>
+                            <tr><td>1</td><td>1</td><td>1</td></tr>
+                        </table>
+                        <p><em>Ejemplo:</em> "Estudias O trabajas"</p>
+                    </div>
+
+                    <div class="operator-card">
+                        <h4>NOT (NO) - ¬</h4>
+                        <p><strong>Símbolo Digital:</strong> ~</p>
+                        <p><strong>Descripción:</strong> Invierte el valor de entrada</p>
+                        <table class="truth-table">
+                            <tr><th>A</th><th>¬A</th></tr>
+                            <tr><td>0</td><td>1</td></tr>
+                            <tr><td>1</td><td>0</td></tr>
+                        </table>
+                        <p><em>Ejemplo:</em> "NO llueve"</p>
+                    </div>
+
+                    <div class="operator-card">
+                        <h4>XOR (O Exclusivo) - ⊕</h4>
+                        <p><strong>Símbolo Digital:</strong> ^</p>
+                        <p><strong>Descripción:</strong> Verdadero si las entradas son diferentes</p>
+                        <table class="truth-table">
+                            <tr><th>A</th><th>B</th><th>A ⊕ B</th></tr>
+                            <tr><td>0</td><td>0</td><td>0</td></tr>
+                            <tr><td>0</td><td>1</td><td>1</td></tr>
+                            <tr><td>1</td><td>0</td><td>1</td></tr>
+                            <tr><td>1</td><td>1</td><td>0</td></tr>
+                        </table>
+                        <p><em>Ejemplo:</em> "O estudias O trabajas (pero no ambos)"</p>
+                    </div>
+
+                    <div class="operator-card">
+                        <h4>NAND (NO Y) - ↑</h4>
+                        <p><strong>Símbolo Digital:</strong> ~&</p>
+                        <p><strong>Descripción:</strong> Negación del AND</p>
+                        <table class="truth-table">
+                            <tr><th>A</th><th>B</th><th>A ↑ B</th></tr>
+                            <tr><td>0</td><td>0</td><td>1</td></tr>
+                            <tr><td>0</td><td>1</td><td>1</td></tr>
+                            <tr><td>1</td><td>0</td><td>1</td></tr>
+                            <tr><td>1</td><td>1</td><td>0</td></tr>
+                        </table>
+                        <p><em>Ejemplo:</em> "NO (llueve Y hace frío)"</p>
+                    </div>
+
+                    <div class="operator-card">
+                        <h4>NOR (NO O) - ↓</h4>
+                        <p><strong>Símbolo Digital:</strong> ~|</p>
+                        <p><strong>Descripción:</strong> Negación del OR</p>
+                        <table class="truth-table">
+                            <tr><th>A</th><th>B</th><th>A ↓ B</th></tr>
+                            <tr><td>0</td><td>0</td><td>1</td></tr>
+                            <tr><td>0</td><td>1</td><td>0</td></tr>
+                            <tr><td>1</td><td>0</td><td>0</td></tr>
+                            <tr><td>1</td><td>1</td><td>0</td></tr>
+                        </table>
+                        <p><em>Ejemplo:</em> "NO estudias Y NO trabajas"</p>
+                    </div>
+                </div>
+
+                <h3>🔗 Equivalencias con Lógica de Proposiciones</h3>
+                
+                <div class="example-box">
+                    <h4>Leyes Fundamentales de la Lógica</h4>
+                    <div class="step-by-step">
+<strong>Ley Conmutativa:</strong>
+A ∧ B = B ∧ A
+A ∨ B = B ∨ A
+
+<strong>Ley Asociativa:</strong>
+(A ∧ B) ∧ C = A ∧ (B ∧ C)
+(A ∨ B) ∨ C = A ∨ (B ∨ C)
+
+<strong>Ley Distributiva:</strong>
+A ∧ (B ∨ C) = (A ∧ B) ∨ (A ∧ C)
+A ∨ (B ∧ C) = (A ∨ B) ∧ (A ∨ C)
+
+<strong>Leyes de De Morgan:</strong>
+¬(A ∧ B) = ¬A ∨ ¬B
+¬(A ∨ B) = ¬A ∧ ¬B
+                    </div>
+                </div>
+
+                <h3>💡 Aplicaciones Prácticas</h3>
+                <div class="quick-conversion">
+                    <div class="conversion-method">
+                        <h4>🔧 Diseño de Circuitos</h4>
+                        <p>Los operadores lógicos son la base de todas las puertas lógicas en circuitos digitales. Cada operador corresponde directamente a una puerta física.</p>
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li><strong>Puerta AND:</strong> Control de acceso</li>
+                            <li><strong>Puerta OR:</strong> Sistemas de alarma</li>
+                            <li><strong>Puerta NOT:</strong> Inversores</li>
+                            <li><strong>Puerta XOR:</strong> Comparadores</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="conversion-method">
+                        <h4>💻 Programación</h4>
+                        <p>En lenguajes de programación, estos operadores permiten crear condiciones complejas y tomar decisiones lógicas.</p>
+                        <div class="step-by-step">if (edad >= 18 && licencia == true) {
+    // Puede conducir
+}
+
+if (lluvia || nieve) {
+    // Llevar paraguas
+}</div>
+                    </div>
+                    
+                    <div class="conversion-method">
+                        <h4>🎯 Sistemas de Control</h4>
+                        <p>En automatización industrial, estos operadores controlan máquinas y procesos basándose en múltiples condiciones.</p>
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li><strong>Seguridad:</strong> Motor ON solo si puerta cerrada Y sensor OK</li>
+                            <li><strong>Eficiencia:</strong> Ventilador ON si temperatura alta O humedad alta</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="interactive-element">
+                    <h4>🎓 Ejercicio Práctico</h4>
+                    <p><strong>Problema:</strong> Un sistema de seguridad debe activar la alarma si:</p>
+                    <p>• Se abre una puerta (P) Y es de noche (N), O</p>
+                    <p>• Se detecta movimiento (M) Y NO hay nadie autorizado (¬A)</p>
+                    <div class="formula">Alarma = (P ∧ N) ∨ (M ∧ ¬A)</div>
+                </div>
+            </section>
+
+            <section class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-left-color: #667eea;">
+                <h2 style="color: white; border-bottom-color: white;">🎯 Ejercicios Grupales de Conversión</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 25px 0;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                        <h4>Grupo 1: Conversiones Básicas</h4>
+                        <p>1. Convertir 173₁₀ a binario, octal y hexadecimal</p>
+                        <p>2. Convertir 10101110₂ a decimal, octal y hexadecimal</p>
+                        <p>3. Convertir 2A7₁₆ a decimal, binario y octal</p>
+                        <p>4. Convertir 345₈ a decimal, binario y hexadecimal</p>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                        <h4>Grupo 2: Conversiones Rápidas</h4>
+                        <p>1. Usar agrupación para convertir 11010110₂ a octal</p>
+                        <p>2. Usar agrupación para convertir 11010110₂ a hexadecimal</p>
+                        <p>3. Convertir ABC₁₆ a binario usando agrupación</p>
+                        <p>4. Convertir 567₈ a binario usando agrupación</p>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                        <h4>Grupo 3: Operadores Lógicos</h4>
+                        <p>1. Simplificar: A ∧ (B ∨ ¬B)</p>
+                        <p>2. Demostrar: ¬(A ∧ B) = ¬A ∨ ¬B</p>
+                        <p>3. Evaluar: (1 ∨ 0) ∧ ¬(1 ∧ 0)</p>
+                        <p>4. Crear tabla de verdad para: (A ⊕ B) ∧ C</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>📚 Resumen y Puntos Clave</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div class="base-card">
+                        <h4>🔢 Sistemas Numéricos</h4>
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li>Decimal: Base 10 (cotidiano)</li>
+                            <li>Binario: Base 2 (computadoras)</li>
+                            <li>Octal: Base 8 (grupos de 3 bits)</li>
+                            <li>Hexadecimal: Base 16 (grupos de 4 bits)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="base-card">
+                        <h4>🔄 Conversiones Rápidas</h4>
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li>Binario → Octal: Agrupa de 3 en 3</li>
+                            <li>Binario → Hex: Agrupa de 4 en 4</li>
+                            <li>Memorizar equivalencias 0-15</li>
+                            <li>Usar divisiones sucesivas para otras bases</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="base-card">
+                        <h4>🧠 Operadores Lógicos</h4>
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li>AND (∧): Ambos verdaderos</li>
+                            <li>OR (∨): Al menos uno verdadero</li>
+                            <li>NOT (¬): Inversión</li>
+                            <li>XOR (⊕): Diferentes</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="base-card">
+                        <h4>⚡️ Aplicaciones</h4>
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li>Diseño de circuitos digitales</li>
+                            <li>Programación de computadoras</li>
+                            <li>Sistemas de control automático</li>
+                            <li>Análisis lógico y matemático</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Generar la tabla de equivalencias completa del 0 al 255
+        function generateEquivalenceTable() {
+            const tbody = document.getElementById('equivalenceTableBody');
+            
+            for (let i = 0; i < 256; i += 4) {
+                const row = document.createElement('tr');
+                
+                for (let j = 0; j < 4 && (i + j) < 256; j++) {
+                    const num = i + j;
+                    const decimal = num;
+                    const binary = num.toString(2).padStart(8, '0');
+                    const octal = num.toString(8);
+                    const hex = num.toString(16).toUpperCase();
+                    
+                    row.innerHTML += `
+                        <td>${decimal}</td>
+                        <td>${binary}</td>
+                        <td>${octal}</td>
+                        <td>${hex}</td>
+                    `;
+                }
+                
+                tbody.appendChild(row);
+            }
+        }
+        
+        // Smooth scrolling para los enlaces de navegación
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+        
+        // Generar la tabla cuando se carga la página
+        document.addEventListener('DOMContentLoaded', generateEquivalenceTable);
+        
+        // Destacar números importantes en la tabla
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const cells = document.querySelectorAll('.equivalence-table td');
+                cells.forEach(cell => {
+                    const value = cell.textContent;
+                    // Destacar números importantes (potencias de 2, etc.)
+                    if (['0', '1', '15', '16', '31', '32', '63', '64', '127', '128', '255'].includes(value)) {
+                        cell.style.background = '#fff3cd';
+                        cell.style.fontWeight = 'bold';
+                        cell.style.color = '#856404';
+                    }
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
