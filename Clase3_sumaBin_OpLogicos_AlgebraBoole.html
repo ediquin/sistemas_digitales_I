@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas Digitales I - Suma Binaria y Álgebra de Boole</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header h2 {
+            color: #34495e;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .instructor-info {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .binary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .binary-table th,
+        .binary-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .binary-table th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .binary-table tr:hover {
+            background: #e3f2fd;
+        }
+
+        .example-box {
+            background: #f0f8ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-box h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .binary-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            background: #e8f4fd;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .interactive-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .input-group input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: monospace;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .result-display {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .law-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .law-card h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .law-formula {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            margin: 8px 0;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .truth-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator {
+                grid-template-columns: 1fr;
+            }
+            
+            .truth-table {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step-by-step {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #f39c12;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistemas Digitales I</h1>
+            <h2>Suma Binaria, Operadores Lógicos y Álgebra de Boole</h2>
+            <div class="instructor-info">
+                Prof. Edilson Laura<br>
+                Universidad Adventista de Bolivia
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3>🔢 Sistema Binario</h3>
+                <p>El sistema binario es la base fundamental de todos los sistemas digitales modernos. Utiliza únicamente dos símbolos: <strong>0</strong> y <strong>1</strong>, los cuales representan estados físicos como ausencia y presencia de voltaje, estados magnéticos, o posiciones de interruptores.</p>
+                
+                <div class="example-box">
+                    <h4>Valores Posicionales en Binario</h4>
+                    <p>Cada posición representa una potencia de 2:</p>
+                    <div style="font-family: monospace; font-size: 1.1rem; text-align: center; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <div>Posiciones: &nbsp;&nbsp;2³ &nbsp;&nbsp;2² &nbsp;&nbsp;2¹ &nbsp;&nbsp;2⁰</div>
+                        <div>Valores: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8 &nbsp;&nbsp;&nbsp;&nbsp;4 &nbsp;&nbsp;&nbsp;&nbsp;2 &nbsp;&nbsp;&nbsp;&nbsp;1</div>
+                        <div>Ejemplo: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;1 &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;1 = 13₁₀</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>➕ Suma Binaria</h3>
+                <p>La suma binaria sigue reglas simples pero fundamentales:</p>
+                
+                <table class="binary-table">
+                    <thead>
+                        <tr>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>Suma</th>
+                            <th>Acarreo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="example-box">
+                    <h4>Ejemplo: 1011 + 1101</h4>
+                    <pre style="font-family: monospace; font-size: 1.2rem;">
+    1011
+  + 1101
+  ------
+   11000
+                    </pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔧 Operadores Lógicos</h3>
+                <p>Los operadores lógicos son la base del álgebra de Boole:</p>
+                
+                <div class="truth-table">
+                    <div>
+                        <h4>AND (Y)</h4>
+                        <table class="binary-table">
+                            <tr><th>A</th><th>B</th><th>A·B</th></tr>
+                            <tr><td>0</td><td>0</td><td>0</td></tr>
+                            <tr><td>0</td><td>1</td><td>0</td></tr>
+                            <tr><td>1</td><td>0</td><td>0</td></tr>
+                            <tr><td>1</td><td>1</td><td>1</td></tr>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h4>OR (O)</h4>
+                        <table class="binary-table">
+                            <tr><th>A</th><th>B</th><th>A+B</th></tr>
+                            <tr><td>0</td><td>0</td><td>0</td></tr>
+                            <tr><td>0</td><td>1</td><td>1</td></tr>
+                            <tr><td>1</td><td>0</td><td>1</td></tr>
+                            <tr><td>1</td><td>1</td><td>1</td></tr>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h4>NOT (NO)</h4>
+                        <table class="binary-table">
+                            <tr><th>A</th><th>Ā</th></tr>
+                            <tr><td>0</td><td>1</td></tr>
+                            <tr><td>1</td><td>0</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <h3>🧮 Calculadora Binaria Interactiva</h3>
+            <div class="calculator">
+                <div class="input-group">
+                    <label for="num1">Primer número binario:</label>
+                    <input type="text" id="num1" placeholder="Ej: 1011" maxlength="8">
+                </div>
+                <div class="input-group">
+                    <label for="num2">Segundo número binario:</label>
+                    <input type="text" id="num2" placeholder="Ej: 1101" maxlength="8">
+                </div>
+            </div>
+            <button class="btn" onclick="calculateSum()">Calcular Suma</button>
+            <button class="btn" onclick="calculateAND()">Operación AND</button>
+            <button class="btn" onclick="calculateOR()">Operación OR</button>
+            <button class="btn" onclick="calculateXOR()">Operación XOR</button>
+            
+            <div class="result-display" id="result">
+                Ingrese dos números binarios y seleccione una operación
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📚 Leyes del Álgebra de Boole</h3>
+            <p>Las leyes fundamentales que rigen las operaciones lógicas:</p>
+            
+            <div class="law-card">
+                <h4>Leyes Conmutativas</h4>
+                <div class="law-formula">A + B = B + A</div>
+                <div class="law-formula">A · B = B · A</div>
+            </div>
+            
+            <div class="law-card">
+                <h4>Leyes Asociativas</h4>
+                <div class="law-formula">A + (B + C) = (A + B) + C</div>
+                <div class="law-formula">A · (B · C) = (A · B) · C</div>
+            </div>
+            
+            <div class="law-card">
+                <h4>Leyes Distributivas</h4>
+                <div class="law-formula">A · (B + C) = A·B + A·C</div>
+                <div class="law-formula">A + (B · C) = (A + B) · (A + C)</div>
+            </div>
+            
+            <div class="law-card">
+                <h4>Leyes de Identidad</h4>
+                <div class="law-formula">A + 0 = A</div>
+                <div class="law-formula">A · 1 = A</div>
+            </div>
+            
+            <div class="law-card">
+                <h4>Leyes de Complemento</h4>
+                <div class="law-formula">A + Ā = 1</div>
+                <div class="law-formula">A · Ā = 0</div>
+            </div>
+            
+            <div class="law-card">
+                <h4>Leyes de De Morgan</h4>
+                <div class="law-formula">‾(A + B) = Ā · B̄</div>
+                <div class="law-formula">‾(A · B) = Ā + B̄</div>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <h3>🎯 Ejercicios de Simplificación Booleana</h3>
+            
+            <div class="example-box">
+                <h4>Ejercicio 1: Aplicación de Ley de Identidad</h4>
+                <p><strong>Simplifica:</strong> A·B + A·B·1 + A·B̄·0</p>
+                <button class="btn" onclick="showSolution(1)">Ver Solución</button>
+                <div id="solution1" style="display: none; margin-top: 15px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <p><strong>Step 1:</strong> Aplicar leyes de identidad (X·1 = X, X·0 = 0)</p>
+                        <p>A·B + A·B·1 + A·B̄·0 = A·B + A·B + 0</p>
+                        <p><strong>Step 2:</strong> Eliminar el término nulo y aplicar idempotencia (X + X = X)</p>
+                        <p>A·B + A·B = A·B</p>
+                        <p><strong>Respuesta final:</strong> <span class="binary-number">A·B</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>Ejercicio 2: Factorización y Complementos</h4>
+                <p><strong>Simplifica:</strong> A·B + A·B̄ + Ā·B</p>
+                <button class="btn" onclick="showSolution(2)">Ver Solución</button>
+                <div id="solution2" style="display: none; margin-top: 15px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <p><strong>Step 1:</strong> Factorizar A de los primeros dos términos</p>
+                        <p>A·B + A·B̄ + Ā·B = A·(B + B̄) + Ā·B</p>
+                        <p><strong>Step 2:</strong> Aplicar ley de complemento (B + B̄ = 1)</p>
+                        <p>A·(B + B̄) + Ā·B = A·1 + Ā·B = A + Ā·B</p>
+                        <p><strong>Step 3:</strong> Aplicar teorema de absorción (X + X̄·Y = X + Y)</p>
+                        <p>A + Ā·B = A + B</p>
+                        <p><strong>Respuesta final:</strong> <span class="binary-number">A + B</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Ejercicio 3: Aplicación de Leyes de De Morgan</h4>
+                <p><strong>Simplifica:</strong> ‾(A + B)·‾(C·D) + A·B̄</p>
+                <button class="btn" onclick="showSolution(3)">Ver Solución</button>
+                <div id="solution3" style="display: none; margin-top: 15px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <p><strong>Step 1:</strong> Aplicar leyes de De Morgan</p>
+                        <p>‾(A + B) = Ā·B̄ y ‾(C·D) = C̄ + D̄</p>
+                        <p>‾(A + B)·‾(C·D) = (Ā·B̄)·(C̄ + D̄)</p>
+                        <p><strong>Step 2:</strong> Aplicar distributiva</p>
+                        <p>(Ā·B̄)·(C̄ + D̄) = Ā·B̄·C̄ + Ā·B̄·D̄</p>
+                        <p><strong>Step 3:</strong> Expresión completa</p>
+                        <p>Ā·B̄·C̄ + Ā·B̄·D̄ + A·B̄</p>
+                        <p><strong>Respuesta final:</strong> <span class="binary-number">Ā·B̄·C̄ + Ā·B̄·D̄ + A·B̄</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Ejercicio 4: Simplificación Compleja con XOR</h4>
+                <p><strong>Simplifica:</strong> A⊕B + A·B + Ā·B̄</p>
+                <p><small><em>Recordatorio: A⊕B = A·B̄ + Ā·B</em></small></p>
+                <button class="btn" onclick="showSolution(4)">Ver Solución</button>
+                <div id="solution4" style="display: none; margin-top: 15px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <p><strong>Step 1:</strong> Expandir XOR</p>
+                        <p>A⊕B + A·B + Ā·B̄ = (A·B̄ + Ā·B) + A·B + Ā·B̄</p>
+                        <p><strong>Step 2:</strong> Reagrupar términos</p>
+                        <p>A·B̄ + Ā·B + A·B + Ā·B̄</p>
+                        <p><strong>Step 3:</strong> Factorizar</p>
+                        <p>A·(B̄ + B) + Ā·(B + B̄)</p>
+                        <p><strong>Step 4:</strong> Aplicar ley de complemento</p>
+                        <p>A·1 + Ā·1 = A + Ā</p>
+                        <p><strong>Step 5:</strong> Aplicar ley de complemento final</p>
+                        <p>A + Ā = 1</p>
+                        <p><strong>Respuesta final:</strong> <span class="binary-number">1 (Tautología)</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Ejercicio Adicional: Suma Binaria</h4>
+                <p>Calcula: 1010₂ + 0111₂</p>
+                <button class="btn" onclick="showSolution(5)">Ver Solución</button>
+                <div id="solution5" style="display: none; margin-top: 15px;">
+                    <pre style="font-family: monospace; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+  1010
++ 0111
+------
+ 10001
+
+Explicación paso a paso:
+Columna 0 (derecha): 0 + 1 = 1
+Columna 1: 1 + 1 = 0, acarreo 1
+Columna 2: 0 + 1 + 1(acarreo) = 0, acarreo 1  
+Columna 3: 1 + 0 + 1(acarreo) = 0, acarreo 1
+Columna 4: 0 + 0 + 1(acarreo) = 1
+
+Resultado: 10001₂ = 17₁₀
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para validar entrada binaria
+        function validateBinary(input) {
+            return /^[01]+$/.test(input);
+        }
+
+        // Función para convertir binario a decimal
+        function binaryToDecimal(binary) {
+            return parseInt(binary, 2);
+        }
+
+        // Función para convertir decimal a binario
+        function decimalToBinary(decimal) {
+            return decimal.toString(2);
+        }
+
+        // Función para suma binaria
+        function calculateSum() {
+            const num1 = document.getElementById('num1').value.trim();
+            const num2 = document.getElementById('num2').value.trim();
+            const result = document.getElementById('result');
+
+            if (!validateBinary(num1) || !validateBinary(num2)) {
+                result.innerHTML = '❌ Error: Solo se permiten dígitos 0 y 1';
+                return;
+            }
+
+            const dec1 = binaryToDecimal(num1);
+            const dec2 = binaryToDecimal(num2);
+            const sum = dec1 + dec2;
+            const binarySum = decimalToBinary(sum);
+
+            result.innerHTML = `
+                ${num1} + ${num2} = ${binarySum}<br>
+                <small>Verificación: ${dec1} + ${dec2} = ${sum}</small>
+            `;
+        }
+
+        // Función para operación AND
+        function calculateAND() {
+            const num1 = document.getElementById('num1').value.trim();
+            const num2 = document.getElementById('num2').value.trim();
+            const result = document.getElementById('result');
+
+            if (!validateBinary(num1) || !validateBinary(num2)) {
+                result.innerHTML = '❌ Error: Solo se permiten dígitos 0 y 1';
+                return;
+            }
+
+            const dec1 = binaryToDecimal(num1);
+            const dec2 = binaryToDecimal(num2);
+            const andResult = dec1 & dec2;
+            const binaryAnd = decimalToBinary(andResult);
+
+            result.innerHTML = `
+                ${num1} AND ${num2} = ${binaryAnd}<br>
+                <small>Operación bit a bit</small>
+            `;
+        }
+
+        // Función para operación XOR
+        function calculateXOR() {
+            const num1 = document.getElementById('num1').value.trim();
+            const num2 = document.getElementById('num2').value.trim();
+            const result = document.getElementById('result');
+
+            if (!validateBinary(num1) || !validateBinary(num2)) {
+                result.innerHTML = '❌ Error: Solo se permiten dígitos 0 y 1';
+                return;
+            }
+
+            const dec1 = binaryToDecimal(num1);
+            const dec2 = binaryToDecimal(num2);
+            const xorResult = dec1 ^ dec2;
+            const binaryXor = decimalToBinary(xorResult);
+
+            result.innerHTML = `
+                ${num1} XOR ${num2} = ${binaryXor}<br>
+                <small>XOR: verdadero cuando las entradas son diferentes</small>
+            `;
+        }
+
+        // Función para mostrar soluciones
+        function showSolution(exerciseNumber) {
+            const solution = document.getElementById(`solution${exerciseNumber}`);
+            if (solution.style.display === 'none') {
+                solution.style.display = 'block';
+            } else {
+                solution.style.display = 'none';
+            }
+        }
+
+        // Validación en tiempo real para entradas binarias
+        document.getElementById('num1').addEventListener('input', function(e) {
+            const value = e.target.value;
+            if (value && !validateBinary(value)) {
+                e.target.style.borderColor = '#e74c3c';
+            } else {
+                e.target.style.borderColor = '#ddd';
+            }
+        });
+
+        document.getElementById('num2').addEventListener('input', function(e) {
+            const value = e.target.value;
+            if (value && !validateBinary(value)) {
+                e.target.style.borderColor = '#e74c3c';
+            } else {
+                e.target.style.borderColor = '#ddd';
+            }
+        });
+    </script>
+</body>
+</html>
