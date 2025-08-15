@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álgebra de Boole - Prof. Edilson Laura Mercado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            margin: -20px -20px 30px -20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #4CAF50;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #34495e;
+            margin: 20px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+            transition: background-color 0.3s ease;
+        }
+
+        .formula {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-table {
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        .demo-table th {
+            background: #3498db;
+        }
+
+        .highlight {
+            background: #d4edda;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .circuit-description {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .activities {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .activities ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .activities li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .activities li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            top: 8px;
+        }
+
+        .nav-menu {
+            background: #34495e;
+            padding: 15px 0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background-color: #4CAF50;
+        }
+
+        .truth-table-small {
+            font-size: 0.9em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .nav-menu a {
+                display: block;
+                margin: 5px 0;
+            }
+
+            table {
+                font-size: 0.8em;
+            }
+
+            th, td {
+                padding: 8px 4px;
+            }
+
+            .formula {
+                font-size: 1em;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 0.7em;
+            }
+
+            th, td {
+                padding: 6px 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Álgebra de Boole</h1>
+            <p class="subtitle">Prof. Edilson Laura Mercado - Universidad Adventista de Bolivia</p>
+        </header>
+
+        <nav class="nav-menu">
+            <a href="#postulados">Postulados</a>
+            <a href="#demostraciones">Demostraciones</a>
+            <a href="#miniterminos">Minitérminos</a>
+            <a href="#ejemplo">Ejemplo Práctico</a>
+            <a href="#actividades">Actividades</a>
+        </nav>
+
+        <section id="postulados" class="section">
+            <h2>2. Postulados o Teoremas Básicos del Álgebra de Boole</h2>
+            <p>El álgebra de Boole se fundamenta en un conjunto de postulados que definen las operaciones básicas sobre variables binarias. Estos postulados son la base teórica para el diseño y análisis de circuitos digitales.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N.º</th>
+                            <th>Nombre</th>
+                            <th>Intersección (AND)</th>
+                            <th>Unión (OR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Propiedad conmutativa</td>
+                            <td>x·y = y·x</td>
+                            <td>x + y = y + x</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Propiedad asociativa</td>
+                            <td>x·(y·z) = (x·y)·z</td>
+                            <td>x+(y+z) = (x+y)+z</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Propiedad distributiva</td>
+                            <td>x·(y+z) = x·y + x·z</td>
+                            <td>x+(y·z) = (x+y)·(x+z)</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Reglas de complemento</td>
+                            <td>x·x̄ = 0</td>
+                            <td>x + x̄ = 1</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Reglas de potencia</td>
+                            <td>x·x = x</td>
+                            <td>x + x = x</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Reglas de absorción</td>
+                            <td>x·(x+y) = x</td>
+                            <td>x + x·y = x</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Leyes de De Morgan</td>
+                            <td>(x·y)̄ = x̄ + ȳ</td>
+                            <td>(x + y)̄ = x̄·ȳ</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Reglas del 0 y 1</td>
+                            <td>x·1 = x, x·0 = 0</td>
+                            <td>x+1 = 1, x+0 = x</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Involución</td>
+                            <td colspan="2">(x̄)̄ = x</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="demostraciones" class="section">
+            <h2>3. Demostraciones con Tablas de Verdad</h2>
+            <p>Las tablas de verdad nos permiten verificar la validez de los postulados del álgebra de Boole de manera sistemática. Cada combinación posible de variables de entrada se evalúa para demostrar que ambos lados de una ecuación producen los mismos resultados.</p>
+            
+            <div class="example-box">
+                <h3>Ejemplo: Distribución del AND sobre el OR</h3>
+                <div class="formula">
+                    Demostrar: x·(y+z) = x·y + x·z
+                </div>
+                
+                <div class="table-container">
+                    <table class="demo-table truth-table-small">
+                        <thead>
+                            <tr>
+                                <th>x</th>
+                                <th>y</th>
+                                <th>z</th>
+                                <th>y+z</th>
+                                <th>x·(y+z)</th>
+                                <th>x·y</th>
+                                <th>x·z</th>
+                                <th>x·y + x·z</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="highlight">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="highlight">0</td>
+                            </tr>
+                            <tr>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td class="highlight">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="highlight">0</td>
+                            </tr>
+                            <tr>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td class="highlight">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="highlight">0</td>
+                            </tr>
+                            <tr>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td class="highlight">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="highlight">0</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="highlight">0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td class="highlight">0</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td class="highlight">1</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td class="highlight">1</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td class="highlight">1</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td class="highlight">1</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td class="highlight">1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td class="highlight">1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <p><strong>✅ Coinciden todas las salidas ⇒ Propiedad demostrada</strong></p>
+                <p>Como podemos observar, las columnas x·(y+z) y x·y + x·z tienen valores idénticos en todas las filas, lo que confirma matemáticamente la validez de la propiedad distributiva.</p>
+            </div>
+        </section>
+
+        <section id="miniterminos" class="section">
+            <h2>4. Minitérminos y Maxitérminos</h2>
+            
+            <h3>📌 ¿Qué son?</h3>
+            <p>Los minitérminos y maxitérminos son formas canónicas de representar funciones booleanas que nos permiten expresar cualquier función lógica de manera estándar y sistemática.</p>
+            
+            <div class="formula">
+                <strong>Minitérminos (m):</strong> Combinaciones donde la función es <strong>1</strong>, usando <strong>AND</strong> de variables y sus negaciones.<br>
+                Se representa como: m<sub>i</sub> = A·B̄·C (según la fila que representa)
+            </div>
+            
+            <div class="formula">
+                <strong>Maxitérminos (M):</strong> Combinaciones donde la función es <strong>0</strong>, usando <strong>OR</strong> de variables y sus negaciones.<br>
+                Se representa como: M<sub>i</sub> = A + B̄ + C
+            </div>
+            
+            <p>Esta representación canónica es fundamental porque permite convertir cualquier tabla de verdad en una expresión algebraica estándar, facilitando la simplificación y el diseño de circuitos digitales.</p>
+        </section>
+
+        <section id="ejemplo" class="section">
+            <h2>5. Ejemplo: Tabla de verdad con minitérminos y maxitérminos</h2>
+            <p>Analicemos una función práctica F(A, B, C) para comprender cómo se obtienen las formas canónicas:</p>
+            
+            <div class="table-container">
+                <table class="truth-table-small">
+                    <thead>
+                        <tr>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>C</th>
+                            <th>F</th>
+                            <th>Índice</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>M₀</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td class="highlight">1</td>
+                            <td>1</td>
+                            <td>m₁</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>2</td>
+                            <td>M₂</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td class="highlight">1</td>
+                            <td>3</td>
+                            <td>m₃</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td class="highlight">1</td>
+                            <td>4</td>
+                            <td>m₄</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>5</td>
+                            <td>M₅</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="highlight">1</td>
+                            <td>6</td>
+                            <td>m₆</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td class="highlight">1</td>
+                            <td>7</td>
+                            <td>m₇</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>🔹 Forma canónica de suma de minitérminos (SOP):</h3>
+            <div class="formula">
+                F = Σm(1, 3, 4, 6, 7)<br><br>
+                F = Ā·B̄·C + Ā·B·C + A·B̄·C̄ + A·B·C̄ + A·B·C
+            </div>
+            <p>Esta expresión suma todos los minitérminos donde la función F vale 1. Cada término representa exactamente una fila de la tabla de verdad.</p>
+
+            <h3>🔹 Forma canónica de producto de maxitérminos (POS):</h3>
+            <div class="formula">
+                F = ΠM(0, 2, 5)<br><br>
+                F = (A + B + C)·(A + B̄ + C)·(Ā + B + C̄)
+            </div>
+            <p>Esta expresión multiplica todos los maxitérminos donde la función F vale 0. Es la forma dual de la representación SOP.</p>
+        </section>
+
+        <section class="section">
+            <h2>6. ¿Cómo usar minitérminos y maxitérminos?</h2>
+            <p>Las formas canónicas son herramientas fundamentales en el diseño digital porque proporcionan un punto de partida estándar para la simplificación de circuitos. Son especialmente útiles para expresar funciones lógicas en formas estándar que facilitan la <strong>simplificación</strong>, el <strong>diseño de circuitos</strong> y la <strong>implementación en compuertas lógicas</strong>.</p>
+            
+            <p>En circuitos digitales, la forma SOP se traduce directamente en una arquitectura de dos niveles donde las compuertas AND procesan las variables de entrada para generar los minitérminos, y una compuerta OR final suma todos estos productos para obtener la función completa.</p>
+
+            <div class="circuit-description">
+                <h3>7. Sugerencia Visual: Circuito Lógico de un SOP</h3>
+                <p>Para implementar la función F = Ā·B̄·C + Ā·B·C + A·B̄·C̄ + A·B·C̄ + A·B·C, el circuito tendría:</p>
+                <ul>
+                    <li><strong>Entradas:</strong> A, B, C y sus complementos Ā, B̄, C̄</li>
+                    <li><strong>Primer nivel:</strong> 5 compuertas AND de 3 entradas cada una, generando los minitérminos</li>
+                    <li><strong>Segundo nivel:</strong> 1 compuerta OR de 5 entradas que suma todos los productos</li>
+                    <li><strong>Salida:</strong> La función F resultante</li>
+                </ul>
+                <p>Este diseño de dos niveles es la base para muchas implementaciones en FPGAs y circuitos integrados digitales.</p>
+            </div>
+        </section>
+
+        <section id="actividades" class="section">
+            <h2>8. Actividades Recomendadas</h2>
+            <div class="activities">
+                <p>Para consolidar tu comprensión del álgebra de Boole y las formas canónicas, te recomiendo realizar las siguientes actividades prácticas:</p>
+                <ul>
+                    <li>Realizar una tabla de verdad completa con 3 variables (A, B, C) para una función de tu elección</li>
+                    <li>Identificar y obtener todos los minitérminos y maxitérminos de esa función</li>
+                    <li>Representar la función tanto como SOP (Suma de Productos) como POS (Producto de Sumas)</li>
+                    <li>Verificar matemáticamente con tabla de verdad que ambas representaciones son equivalentes</li>
+                    <li>Implementar el diseño en un simulador digital como Logisim, Proteus o Tinkercad para validar prácticamente tu trabajo</li>
+                    <li>Intentar simplificar las expresiones obtenidas usando los postulados del álgebra de Boole</li>
+                    <li>Comparar el número de compuertas necesarias antes y después de la simplificación</li>
+                </ul>
+                <p>Estas actividades te ayudarán a desarrollar una comprensión sólida de los conceptos teóricos y su aplicación práctica en el diseño de circuitos digitales.</p>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 30px; color: #666; border-top: 1px solid #eee; margin-top: 40px;">
+            <p><strong>Prof. Edilson Laura Mercado</strong></p>
+            <p>Universidad Adventista de Bolivia</p>
+            <p style="margin-top: 15px; font-size: 0.9em;">Material educativo para el estudio del Álgebra de Boole y Circuitos Digitales</p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scrolling para los enlaces de navegación
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Efecto de resaltado para las filas de la tabla al pasar el mouse
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.01)';
+                this.style.transition = 'transform 0.2s ease';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Mostrar un mensaje de bienvenida
+        console.log('Página de Álgebra de Boole cargada correctamente');
+        console.log('Prof. Edilson Laura Mercado - Universidad Adventista de Bolivia');
+    </script>
+</body>
+</html>

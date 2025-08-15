@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mintérminos y Funciones Booleanas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            margin-top: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 25px;
+            border-left: 5px solid #4CAF50;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .section h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .section h3 {
+            color: #388e3c;
+            margin: 20px 0 15px 0;
+            font-size: 1.4em;
+        }
+        
+        .truth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .truth-table th, .truth-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .truth-table th {
+            background: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .truth-table tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        
+        .truth-table tr:hover {
+            background: #e8f5e8;
+        }
+        
+        .minterm-highlight {
+            background: #ffeb3b !important;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.1em;
+            margin: 15px 0;
+            text-align: center;
+            border: 2px solid #2196F3;
+        }
+        
+        .example-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .example-box h4 {
+            color: #f57f17;
+            margin-bottom: 15px;
+        }
+        
+        .interactive-demo {
+            background: #f3e5f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        /* Responsive design improvements */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .function-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .truth-table {
+                font-size: 12px;
+            }
+            
+            .truth-table th, .truth-table td {
+                padding: 8px 4px;
+            }
+            
+            .formula {
+                font-size: 1em;
+                padding: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .truth-table {
+                font-size: 10px;
+                overflow-x: auto;
+                display: block;
+                white-space: nowrap;
+            }
+            
+            .truth-table thead, .truth-table tbody, .truth-table tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+            
+            .section h2 {
+                font-size: 1.5em;
+            }
+            
+            .section h3 {
+                font-size: 1.2em;
+            }
+        }
+        
+        .function-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-top: 4px solid #4CAF50;
+        }
+        
+        .function-card h4 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .note {
+            background: #e8f5e8;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .note strong {
+            color: #2e7d32;
+        }
+        
+        .visual-aid {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mintérminos y las 16 Funciones Booleanas</h1>
+            <p>Prof. Edilson Laura - Universidad Adventista de Bolivia</p>
+            <p>Fundamentos del Álgebra Booleana y Circuitos Digitales</p>
+        </div>
+
+        <div class="section">
+            <h2>1. Introducción al Álgebra Booleana</h2>
+            <p>El álgebra booleana, desarrollada por George Boole en 1854, es un sistema matemático que opera con valores binarios: verdadero (1) y falso (0). Este sistema es fundamental en el diseño de circuitos digitales y sistemas de computación.</p>
+            
+            <div class="note">
+                <strong>Recordatorio:</strong> En el álgebra booleana, trabajamos únicamente con dos valores posibles: 0 (falso) y 1 (verdadero). Todas las operaciones y funciones se basan en esta premisa binaria.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. ¿Qué son los Mintérminos?</h2>
+            <p>Un <strong>mintérmino</strong> es un producto booleano en el cual cada variable de entrada aparece exactamente una vez, ya sea en su forma directa (sin negar) o en su forma complementada (negada). Para n variables, existen exactamente 2ⁿ mintérminos posibles.</p>
+            
+            <h3>2.1 Características de los Mintérminos</h3>
+            <p>Los mintérminos poseen las siguientes características fundamentales:</p>
+            <p>• Cada mintérmino incluye todas las variables del sistema</p>
+            <p>• Cada variable aparece una sola vez en cada mintérmino</p>
+            <p>• Las variables pueden estar en forma directa (A) o complementada (A')</p>
+            <p>• Cada mintérmino es verdadero para exactamente una combinación de valores de entrada</p>
+
+            <h3>2.2 Ejemplo con Dos Variables (A, B)</h3>
+            <table class="truth-table">
+                <thead>
+                    <tr>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>Mintérmino</th>
+                        <th>Notación</th>
+                        <th>Valor del Mintérmino</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>A' · B'</td>
+                        <td>m₀</td>
+                        <td class="minterm-highlight">1</td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>A' · B</td>
+                        <td>m₁</td>
+                        <td class="minterm-highlight">1</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>A · B'</td>
+                        <td>m₂</td>
+                        <td class="minterm-highlight">1</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>A · B</td>
+                        <td>m₃</td>
+                        <td class="minterm-highlight">1</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note">
+                <strong>Observación Importante:</strong> Cada mintérmino es verdadero (igual a 1) para exactamente una combinación de valores de entrada, y falso (igual a 0) para todas las demás combinaciones.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3. Las 16 Funciones Booleanas de Dos Variables</h2>
+            <p>Con dos variables booleanas (A y B), podemos construir exactamente 16 funciones booleanas diferentes. Cada función se define por su tabla de verdad, que especifica el valor de salida para cada una de las 4 combinaciones posibles de entrada.</p>
+
+            <h3>3.1 ¿Por qué exactamente 16 funciones?</h3>
+            <p>Para dos variables, tenemos 4 combinaciones de entrada posibles (2² = 4). Para cada combinación, la salida puede ser 0 ó 1. Por lo tanto, tenemos 2⁴ = 16 funciones booleanas diferentes posibles.</p>
+
+            <h3>3.2 Tabla Completa de las 16 Funciones</h3>
+            <table class="truth-table">
+                <thead>
+                    <tr>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>F₀</th>
+                        <th>F₁</th>
+                        <th>F₂</th>
+                        <th>F₃</th>
+                        <th>F₄</th>
+                        <th>F₅</th>
+                        <th>F₆</th>
+                        <th>F₇</th>
+                        <th>F₈</th>
+                        <th>F₉</th>
+                        <th>F₁₀</th>
+                        <th>F₁₁</th>
+                        <th>F₁₂</th>
+                        <th>F₁₃</th>
+                        <th>F₁₄</th>
+                        <th>F₁₅</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>4. Obtención de Funciones usando Mintérminos</h2>
+            <p>Cualquier función booleana puede expresarse como una suma (OR) de mintérminos. Esta representación se llama <strong>Forma Canónica de Suma de Mintérminos</strong> o <strong>Suma de Productos Canónica</strong>.</p>
+
+            <h3>4.1 Proceso para obtener la función a partir de mintérminos</h3>
+            <p>El proceso es sistemático y sigue estos pasos fundamentales:</p>
+            <p><strong>Paso 1:</strong> Identificar todas las filas de la tabla de verdad donde la función tiene valor 1</p>
+            <p><strong>Paso 2:</strong> Para cada fila identificada, escribir el mintérmino correspondiente</p>
+            <p><strong>Paso 3:</strong> Sumar (OR) todos los mintérminos identificados</p>
+
+            <div class="function-grid">
+                <div class="function-card">
+                    <h4>F₀: Función Constante 0 (Contradicción)</h4>
+                    <div class="formula">F₀ = 0</div>
+                    <p>Esta función siempre es falsa, independientemente de los valores de entrada. No incluye ningún mintérmino.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₁: NOR (A ↓ B)</h4>
+                    <div class="formula">F₁ = A'·B' = m₀</div>
+                    <p>Verdadera solo cuando ambas entradas son falsas. Es el complemento de la función OR.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₂: Inhibición (A > B)</h4>
+                    <div class="formula">F₂ = A'·B = m₁</div>
+                    <p>Verdadera cuando A es falsa y B es verdadera. A inhibe a B.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₃: NOT A (¬A)</h4>
+                    <div class="formula">F₃ = A'·B' + A'·B = A' = m₀ + m₁</div>
+                    <p>El complemento de A. Verdadera cuando A es falsa, independientemente de B.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₄: Inhibición Inversa (A < B)</h4>
+                    <div class="formula">F₄ = A·B' = m₂</div>
+                    <p>Verdadera cuando A es verdadera y B es falsa. B inhibe a A.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₅: NOT B (¬B)</h4>
+                    <div class="formula">F₅ = A'·B' + A·B' = B' = m₀ + m₂</div>
+                    <p>El complemento de B. Verdadera cuando B es falsa, independientemente de A.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₆: XOR (A ⊕ B)</h4>
+                    <div class="formula">F₆ = A'·B + A·B' = m₁ + m₂</div>
+                    <p>OR Exclusiva. Verdadera cuando las entradas son diferentes.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₇: NAND (A ↑ B)</h4>
+                    <div class="formula">F₇ = A'·B' + A'·B + A·B' = m₀ + m₁ + m₂</div>
+                    <p>NOT AND. Falsa solo cuando ambas entradas son verdaderas.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₈: AND (A ∧ B)</h4>
+                    <div class="formula">F₈ = A·B = m₃</div>
+                    <p>Verdadera solo cuando ambas entradas son verdaderas.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₉: XNOR (A ⊙ B)</h4>
+                    <div class="formula">F₉ = A'·B' + A·B = m₀ + m₃</div>
+                    <p>Equivalencia. Verdadera cuando ambas entradas tienen el mismo valor.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₁₀: B (Identidad de B)</h4>
+                    <div class="formula">F₁₀ = A'·B + A·B = B = m₁ + m₃</div>
+                    <p>Copia el valor de B, independientemente de A.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₁₁: Implicación (A → B)</h4>
+                    <div class="formula">F₁₁ = A'·B' + A'·B + A·B = m₀ + m₁ + m₃</div>
+                    <p>Falsa solo cuando A es verdadera y B es falsa.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₁₂: A (Identidad de A)</h4>
+                    <div class="formula">F₁₂ = A·B' + A·B = A = m₂ + m₃</div>
+                    <p>Copia el valor de A, independientemente de B.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₁₃: Implicación Inversa (B → A)</h4>
+                    <div class="formula">F₁₃ = A'·B' + A·B' + A·B = m₀ + m₂ + m₃</div>
+                    <p>Falsa solo cuando B es verdadera y A es falsa.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₁₄: OR (A ∨ B)</h4>
+                    <div class="formula">F₁₄ = A'·B + A·B' + A·B = m₁ + m₂ + m₃</div>
+                    <p>Verdadera cuando al menos una entrada es verdadera.</p>
+                </div>
+
+                <div class="function-card">
+                    <h4>F₁₅: Función Constante 1 (Tautología)</h4>
+                    <div class="formula">F₁₅ = A'·B' + A'·B + A·B' + A·B = 1 = m₀ + m₁ + m₂ + m₃</div>
+                    <p>Siempre verdadera, independientemente de los valores de entrada.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5. Ejemplo Detallado: Función XOR</h2>
+            <div class="example-box">
+                <h4>Construcción paso a paso de la función XOR (F₆)</h4>
+                
+                <p><strong>Paso 1:</strong> Identificar las filas donde XOR = 1</p>
+                <table class="truth-table" style="width: 50%; margin: 15px auto;">
+                    <thead>
+                        <tr><th>A</th><th>B</th><th>XOR</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr class="minterm-highlight"><td>0</td><td>1</td><td>1</td></tr>
+                        <tr class="minterm-highlight"><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>Paso 2:</strong> Escribir los mintérminos correspondientes</p>
+                <p>• Para A=0, B=1: el mintérmino es A'·B = m₁</p>
+                <p>• Para A=1, B=0: el mintérmino es A·B' = m₂</p>
+                
+                <p><strong>Paso 3:</strong> Sumar los mintérminos</p>
+                <div class="formula">XOR = A'·B + A·B' = m₁ + m₂</div>
+                
+                <p><strong>Verificación:</strong> Esta expresión es verdadera exactamente cuando las entradas son diferentes, que es la definición de XOR.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>6. Aplicaciones Prácticas</h2>
+            <p>La comprensión de mintérminos y funciones booleanas es fundamental en múltiples áreas de la ingeniería y ciencias de la computación:</p>
+
+            <h3>6.1 Diseño de Circuitos Digitales</h3>
+            <p>Los mintérminos nos permiten diseñar circuitos lógicos específicos. Cada mintérmino puede implementarse directamente usando compuertas AND e inversores, y la función completa se obtiene conectando estos productos a través de compuertas OR.</p>
+
+            <h3>6.2 Programación y Algoritmos</h3>
+            <p>Las operaciones booleanas son fundamentales en la programación, especialmente en estructuras condicionales, operaciones bitwise y algoritmos de búsqueda.</p>
+
+            <h3>6.3 Sistemas de Control</h3>
+            <p>En automatización industrial, estas funciones determinan el comportamiento de sistemas basados en múltiples condiciones de entrada.</p>
+
+            <div class="note">
+                <strong>Reflexión:</strong> Cada una de las 16 funciones booleanas tiene aplicaciones específicas en el diseño digital. Comprender su construcción a partir de mintérminos nos proporciona una herramienta poderosa para el análisis y síntesis de sistemas digitales.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>7. Ejercicios Propuestos</h2>
+            
+            <div class="example-box">
+                <h4>Ejercicio 1: Construcción de Función</h4>
+                <p>Construya la función booleana F(A,B) que sea verdadera únicamente cuando:</p>
+                <p>• A es falsa y B es falsa, O</p>
+                <p>• A es verdadera y B es verdadera</p>
+                <p><strong>Solución:</strong> Esta es la función XNOR: F = A'·B' + A·B = m₀ + m₃</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Ejercicio 2: Identificación de Función</h4>
+                <p>Dada la expresión F = A'·B' + A'·B + A·B', identifique:</p>
+                <p>a) Los mintérminos incluidos</p>
+                <p>b) El nombre de la función</p>
+                <p>c) La tabla de verdad</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Ejercicio 3: Complemento de Función</h4>
+                <p>Si F = A·B + A'·B, encuentre F' (el complemento de F) expresado como suma de mintérminos.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>8. Conclusiones</h2>
+            <p>Los mintérminos constituyen los bloques fundamentales para la construcción de cualquier función booleana. Su comprensión profunda nos permite:</p>
+            
+            <p>• Representar sistemáticamente cualquier función lógica</p>
+            <p>• Diseñar circuitos digitales de manera metódica</p>
+            <p>• Analizar y optimizar sistemas lógicos complejos</p>
+            <p>• Establecer una base sólida para conceptos avanzados como mapas de Karnaugh y minimización lógica</p>
+
+            <div class="note">
+                <strong>Para la próxima clase:</strong> Estudiaremos cómo simplificar estas expresiones booleanas usando técnicas algebraicas y mapas de Karnaugh, reduciendo la complejidad de implementación en circuitos reales.
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: #f5f5f5; border-radius: 10px;">
+            <p><strong>Universidad Adventista de Bolivia</strong></p>
+            <p>Material preparado por Prof. Edilson Laura</p>
+            <p>Curso: Circuitos Digitales y Álgebra Booleana</p>
+        </div>
+    </div>
+</body>
+</html>

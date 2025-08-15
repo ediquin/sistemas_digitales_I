@@ -390,6 +390,121 @@
             </div>
         </div>
 
+        <div class="card">
+            <h3>🔢 Suma Aritmética Booleana</h3>
+            <p>La suma aritmética en el sistema booleano es fundamental para entender cómo se realizan las operaciones matemáticas en sistemas digitales.</p>
+            
+            <div class="example-box">
+                <h4>Diferencias entre Operaciones Lógicas y Aritméticas</h4>
+                <p>Es importante distinguir entre operaciones lógicas y aritméticas en el contexto booleano:</p>
+                
+                <table class="binary-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Operación</th>
+                            <th>Símbolo</th>
+                            <th>Ejemplo</th>
+                            <th>Resultado</th>
+                            <th>Propósito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Suma Aritmética</strong></td>
+                            <td>+</td>
+                            <td>1 + 1</td>
+                            <td>10 (binario)</td>
+                            <td>Operación matemática con acarreo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Suma Lógica (OR)</strong></td>
+                            <td>+</td>
+                            <td>1 + 1</td>
+                            <td>1</td>
+                            <td>Operación lógica sin acarreo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiplicación Aritmética</strong></td>
+                            <td>×</td>
+                            <td>1 × 1</td>
+                            <td>1</td>
+                            <td>Operación matemática</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiplicación Lógica (AND)</strong></td>
+                            <td>·</td>
+                            <td>1 · 1</td>
+                            <td>1</td>
+                            <td>Operación lógica</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="example-box">
+                <h4>Reglas de la Suma Aritmética Binaria</h4>
+                <p>La suma aritmética binaria sigue reglas específicas que incluyen el manejo del acarreo:</p>
+                
+                <table class="binary-table">
+                    <thead>
+                        <tr>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>Acarreo Previo</th>
+                            <th>Suma</th>
+                            <th>Nuevo Acarreo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="example-box">
+                <h4>Ejemplo Práctico: Suma Aritmética vs Lógica</h4>
+                <p><strong>Suma Aritmética de 1011 + 1101:</strong></p>
+                <pre style="font-family: monospace; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+  1011  (11 en decimal)
++ 1101  (13 en decimal)
+------
+ 11000  (24 en decimal)
+
+Paso a paso:
+Columna 0: 1 + 1 = 0, acarreo 1
+Columna 1: 1 + 0 + 1(acarreo) = 0, acarreo 1
+Columna 2: 0 + 1 + 1(acarreo) = 0, acarreo 1
+Columna 3: 1 + 1 + 1(acarreo) = 1, acarreo 1
+Columna 4: 0 + 0 + 1(acarreo) = 1
+                </pre>
+                
+                <p><strong>Si fuera suma lógica (OR):</strong></p>
+                <pre style="font-family: monospace; background: #f8f9fa; padding: 15px; border-radius: 8px;">
+  1011
++ 1101
+------
+  1111  (Resultado lógico, no matemático)
+                </pre>
+            </div>
+
+            <div class="example-box">
+                <h4>Aplicaciones de la Suma Aritmética Booleana</h4>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Procesadores:</strong> Unidad Aritmético-Lógica (ALU) para cálculos matemáticos</li>
+                    <li><strong>Contadores:</strong> Incremento de valores en sistemas digitales</li>
+                    <li><strong>Calculadoras:</strong> Operaciones matemáticas básicas</li>
+                    <li><strong>Direccionamiento:</strong> Cálculo de direcciones de memoria</li>
+                </ul>
+            </div>
+        </div>
+
         <div class="interactive-section">
             <h3>🧮 Calculadora Binaria Interactiva</h3>
             <div class="calculator">
@@ -412,46 +527,7 @@
             </div>
         </div>
 
-        <div class="card">
-            <h3>📚 Leyes del Álgebra de Boole</h3>
-            <p>Las leyes fundamentales que rigen las operaciones lógicas:</p>
-            
-            <div class="law-card">
-                <h4>Leyes Conmutativas</h4>
-                <div class="law-formula">A + B = B + A</div>
-                <div class="law-formula">A · B = B · A</div>
-            </div>
-            
-            <div class="law-card">
-                <h4>Leyes Asociativas</h4>
-                <div class="law-formula">A + (B + C) = (A + B) + C</div>
-                <div class="law-formula">A · (B · C) = (A · B) · C</div>
-            </div>
-            
-            <div class="law-card">
-                <h4>Leyes Distributivas</h4>
-                <div class="law-formula">A · (B + C) = A·B + A·C</div>
-                <div class="law-formula">A + (B · C) = (A + B) · (A + C)</div>
-            </div>
-            
-            <div class="law-card">
-                <h4>Leyes de Identidad</h4>
-                <div class="law-formula">A + 0 = A</div>
-                <div class="law-formula">A · 1 = A</div>
-            </div>
-            
-            <div class="law-card">
-                <h4>Leyes de Complemento</h4>
-                <div class="law-formula">A + Ā = 1</div>
-                <div class="law-formula">A · Ā = 0</div>
-            </div>
-            
-            <div class="law-card">
-                <h4>Leyes de De Morgan</h4>
-                <div class="law-formula">‾(A + B) = Ā · B̄</div>
-                <div class="law-formula">‾(A · B) = Ā + B̄</div>
-            </div>
-        </div>
+
 
         <div class="interactive-section">
             <h3>🎯 Ejercicios de Simplificación Booleana</h3>

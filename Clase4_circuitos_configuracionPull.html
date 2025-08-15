@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas Digitales I - Electrónica Básica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header h2 {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .professor-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .professor-info p {
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tab-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #4a4a4a;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .logic-gate {
+            display: inline-block;
+            background: #f8f9fa;
+            border: 2px solid #4a4a4a;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 0.5rem;
+            text-align: center;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .logic-gate:hover {
+            background: #e9ecef;
+            transform: scale(1.05);
+        }
+
+        .logic-gate h4 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .truth-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .truth-table th,
+        .truth-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .truth-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        .truth-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .calculator {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+        }
+
+        .calculator h4 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .circuit-diagram {
+            background: #f8f9fa;
+            border: 2px dashed #6c757d;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 1rem 0;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .example-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .example-box h5 {
+            color: #1976d2;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistemas Digitales I</h1>
+            <h2>Fundamentos de Electrónica para Circuitos Lógicos</h2>
+            <div class="professor-info">
+                <p><strong>Profesor:</strong> Ing. Edilson Laura Mercado</p>
+                <p><strong>Universidad:</strong> Universidad Adventista de Bolivia</p>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('conceptos')">Conceptos Básicos</button>
+            <button class="tab-button" onclick="showTab('ohm')">Ley de Ohm</button>
+            <button class="tab-button" onclick="showTab('logicos')">Operadores Lógicos</button>
+            <button class="tab-button" onclick="showTab('pullup')">Resistencias Pull-Up</button>
+            <button class="tab-button" onclick="showTab('ejercicios')">Ejercicios</button>
+        </div>
+
+        <!-- Conceptos Básicos -->
+        <div id="conceptos" class="content-section active">
+            <div class="card">
+                <h3>🔌 Fundamentos de Electrónica Digital</h3>
+                <p>La electrónica digital es la base de todos los sistemas computacionales modernos. Trabajamos con señales que representan dos estados: <strong>1 (Alto/High)</strong> y <strong>0 (Bajo/Low)</strong>.</p>
+                
+                <div class="highlight">
+                    <h4>Conceptos Fundamentales:</h4>
+                    <ul>
+                        <li><strong>Voltaje (V):</strong> Diferencia de potencial eléctrico, medido en Voltios</li>
+                        <li><strong>Corriente (I):</strong> Flujo de electrones, medido en Amperios</li>
+                        <li><strong>Resistencia (R):</strong> Oposición al flujo de corriente, medido en Ohmios (Ω)</li>
+                        <li><strong>Potencia (P):</strong> Energía consumida por unidad de tiempo, medido en Watts</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h5>Analogía con el Agua:</h5>
+                    <p>Imagina que la electricidad es como el agua:</p>
+                    <ul>
+                        <li><strong>Voltaje</strong> = Presión del agua (fuerza que empuja)</li>
+                        <li><strong>Corriente</strong> = Cantidad de agua que fluye</li>
+                        <li><strong>Resistencia</strong> = Tubería estrecha que limita el flujo</li>
+                        <li><strong>Potencia</strong> = Energía que puede hacer trabajo (mover una rueda)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Niveles Lógicos en Sistemas Digitales</h3>
+                <p>En electrónica digital, solo trabajamos con dos estados bien definidos, como un interruptor de luz: <strong>ENCENDIDO</strong> o <strong>APAGADO</strong>.</p>
+                
+                <table class="truth-table">
+                    <thead>
+                        <tr>
+                            <th>Estado Lógico</th>
+                            <th>Voltaje TTL</th>
+                            <th>Voltaje CMOS</th>
+                            <th>Representación</th>
+                            <th>Analogía</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 (Bajo)</td>
+                            <td>0V - 0.8V</td>
+                            <td>0V - 1.5V</td>
+                            <td>FALSE</td>
+                            <td>Interruptor APAGADO</td>
+                        </tr>
+                        <tr>
+                            <td>1 (Alto)</td>
+                            <td>2V - 5V</td>
+                            <td>3.5V - 5V</td>
+                            <td>TRUE</td>
+                            <td>Interruptor ENCENDIDO</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="example-box">
+                    <h5>¿Por qué solo 0 y 1?</h5>
+                    <p>Los circuitos digitales usan solo dos estados porque:</p>
+                    <ul>
+                        <li><strong>Es más confiable:</strong> Menos probabilidad de errores</li>
+                        <li><strong>Es más simple:</strong> Fácil de implementar con transistores</li>
+                        <li><strong>Es más rápido:</strong> Los transistores cambian rápidamente entre ON/OFF</li>
+                        <li><strong>Es más eficiente:</strong> Menos consumo de energía</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔋 Fuentes de Alimentación Básicas</h3>
+                <p>Los circuitos digitales necesitan una fuente de energía para funcionar. Las más comunes son:</p>
+                
+                <div class="highlight">
+                    <h4>Tipos de Fuentes:</h4>
+                    <ul>
+                        <li><strong>Batería de 9V:</strong> Para proyectos pequeños y portátiles</li>
+                        <li><strong>Fuente de 5V:</strong> Estándar para microcontroladores (Arduino)</li>
+                        <li><strong>Fuente de 3.3V:</strong> Para circuitos modernos de bajo consumo</li>
+                        <li><strong>USB (5V):</strong> Para proyectos conectados a computadoras</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h5>Conectores Comunes:</h5>
+                    <p><strong>VCC o V+:</strong> Terminal positivo (alimentación)</p>
+                    <p><strong>GND o Tierra:</strong> Terminal negativo (referencia común)</p>
+                    <p><strong>Importante:</strong> Nunca conectar VCC directamente a GND (corto circuito)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ley de Ohm -->
+        <div id="ohm" class="content-section">
+            <div class="card">
+                <h3>⚖️ Ley de Ohm</h3>
+                <p>La Ley de Ohm es fundamental para entender los circuitos eléctricos. Establece la relación entre voltaje, corriente y resistencia.</p>
+                
+                <div class="formula-box">
+                    V = I × R
+                </div>
+                
+                <div class="highlight">
+                    <h4>Donde:</h4>
+                    <ul>
+                        <li><strong>V</strong> = Voltaje (Voltios)</li>
+                        <li><strong>I</strong> = Corriente (Amperios)</li>
+                        <li><strong>R</strong> = Resistencia (Ohmios)</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h5>Analogía con el Agua:</h5>
+                    <p>Imagina que tienes una manguera conectada a un tanque de agua:</p>
+                    <ul>
+                        <li><strong>Voltaje (V)</strong> = Presión del agua en el tanque</li>
+                        <li><strong>Corriente (I)</strong> = Cantidad de agua que sale por la manguera</li>
+                        <li><strong>Resistencia (R)</strong> = Qué tan estrecha es la manguera</li>
+                    </ul>
+                    <p><strong>Fórmula:</strong> Presión = Cantidad de agua × Estrechez de la manguera</p>
+                </div>
+
+                <div class="example-box">
+                    <h5>Ejemplo Práctico 1 - LED:</h5>
+                    <p>Si tenemos una resistencia de 1kΩ y queremos que pase 5mA de corriente:</p>
+                    <p><strong>V = I × R = 0.005A × 1000Ω = 5V</strong></p>
+                    <p><em>Esto significa que necesitamos 5V para que pasen 5mA a través de una resistencia de 1kΩ</em></p>
+                </div>
+
+                <div class="example-box">
+                    <h5>Ejemplo Práctico 2 - Cálculo de Resistencia:</h5>
+                    <p>Tenemos un LED que funciona con 2V y queremos limitar la corriente a 20mA usando una fuente de 5V:</p>
+                    <p><strong>Paso 1:</strong> Voltaje en la resistencia = 5V - 2V = 3V</p>
+                    <p><strong>Paso 2:</strong> R = V ÷ I = 3V ÷ 0.02A = 150Ω</p>
+                    <p><em>Necesitamos una resistencia de 150Ω para limitar la corriente del LED</em></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🧮 Calculadora de Ley de Ohm</h3>
+                <div class="calculator">
+                    <h4>Calcula cualquier valor conociendo los otros dos:</h4>
+                    
+                    <div class="input-group">
+                        <label for="voltage">Voltaje (V):</label>
+                        <input type="number" id="voltage" placeholder="Ingresa el voltaje">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="current">Corriente (mA):</label>
+                        <input type="number" id="current" placeholder="Ingresa la corriente en mA">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="resistance">Resistencia (Ω):</label>
+                        <input type="number" id="resistance" placeholder="Ingresa la resistencia">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculateOhm()">Calcular</button>
+                    
+                    <div id="ohmResult" class="result" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operadores Lógicos -->
+        <div id="logicos" class="content-section">
+            <div class="card">
+                <h3>🔧 Operadores Lógicos Fundamentales</h3>
+                <p>Los operadores lógicos son la base de los circuitos digitales. Cada uno realiza una operación específica con las entradas.</p>
+                
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; margin: 2rem 0;">
+                    <div class="logic-gate">
+                        <h4>AND</h4>
+                        <p>Salida = 1 solo si todas las entradas son 1</p>
+                    </div>
+                    <div class="logic-gate">
+                        <h4>OR</h4>
+                        <p>Salida = 1 si al menos una entrada es 1</p>
+                    </div>
+                    <div class="logic-gate">
+                        <h4>NOT</h4>
+                        <p>Salida = inverso de la entrada</p>
+                    </div>
+                    <div class="logic-gate">
+                        <h4>NAND</h4>
+                        <p>Salida = NOT(AND)</p>
+                    </div>
+                    <div class="logic-gate">
+                        <h4>NOR</h4>
+                        <p>Salida = NOT(OR)</p>
+                    </div>
+                    <div class="logic-gate">
+                        <h4>XOR</h4>
+                        <p>Salida = 1 si las entradas son diferentes</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Tabla de Verdad - AND Gate</h3>
+                <table class="truth-table">
+                    <thead>
+                        <tr>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>A AND B</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>📊 Tabla de Verdad - OR Gate</h3>
+                <table class="truth-table">
+                    <thead>
+                        <tr>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>A OR B</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Resistencias Pull-Up -->
+        <div id="pullup" class="content-section">
+            <div class="card">
+                <h3>🔌 Resistencias Pull-Up y Pull-Down</h3>
+                <p>Las resistencias pull-up y pull-down son fundamentales para asegurar estados lógicos definidos en las entradas digitales.</p>
+                
+                <div class="example-box">
+                    <h5>¿Por qué necesitamos estas resistencias?</h5>
+                    <p>Imagina que tienes un interruptor conectado a un microcontrolador:</p>
+                    <ul>
+                        <li><strong>Sin resistencia:</strong> Cuando el interruptor está abierto, la entrada "flota" (estado indefinido)</li>
+                        <li><strong>Con resistencia pull-up:</strong> La entrada se mantiene en ALTO (1) cuando el interruptor está abierto</li>
+                        <li><strong>Con resistencia pull-down:</strong> La entrada se mantiene en BAJO (0) cuando el interruptor está abierto</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <h4>Resistencia Pull-Up:</h4>
+                    <ul>
+                        <li><strong>Función:</strong> Conecta la entrada a VCC a través de una resistencia</li>
+                        <li><strong>Estado por defecto:</strong> Mantiene la entrada en estado ALTO (1) cuando no hay señal</li>
+                        <li><strong>Valores típicos:</strong> 1kΩ - 10kΩ (4.7kΩ es muy común)</li>
+                        <li><strong>Cuándo usar:</strong> Cuando el dispositivo "tira a tierra" (sink current)</li>
+                        <li><strong>Ejemplo:</strong> Botones que conectan a GND cuando se presionan</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <h4>Resistencia Pull-Down:</h4>
+                    <ul>
+                        <li><strong>Función:</strong> Conecta la entrada a tierra a través de una resistencia</li>
+                        <li><strong>Estado por defecto:</strong> Mantiene la entrada en estado BAJO (0) cuando no hay señal</li>
+                        <li><strong>Valores típicos:</strong> 1kΩ - 10kΩ (4.7kΩ es muy común)</li>
+                        <li><strong>Cuándo usar:</strong> Cuando el dispositivo "tira a VCC" (source current)</li>
+                        <li><strong>Ejemplo:</strong> Sensores que proporcionan 5V cuando detectan algo</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h5>Analogía con Interruptores de Luz:</h5>
+                    <p><strong>Pull-Up:</strong> Como un interruptor que normalmente mantiene la luz encendida, y se apaga cuando lo presionas</p>
+                    <p><strong>Pull-Down:</strong> Como un interruptor que normalmente mantiene la luz apagada, y se enciende cuando lo presionas</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🧮 Calculadora de Resistencia Pull-Up</h3>
+                <div class="calculator">
+                    <h4>Calcula el valor óptimo de resistencia pull-up:</h4>
+                    
+                    <div class="input-group">
+                        <label for="vcc">Voltaje de alimentación (VCC):</label>
+                        <input type="number" id="vcc" placeholder="Ej: 5V" value="5">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="vol">Voltaje de salida bajo (VOL):</label>
+                        <input type="number" id="vol" placeholder="Ej: 0.4V" value="0.4">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="iol">Corriente de salida bajo (IOL) en mA:</label>
+                        <input type="number" id="iol" placeholder="Ej: 8mA" value="8">
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="calculatePullUp()">Calcular Resistencia</button>
+                    
+                    <div id="pullupResult" class="result" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📋 Ejemplo Práctico: Botón con Pull-Up</h3>
+                <div class="example-box">
+                    <h5>Circuito típico de botón:</h5>
+                    <p>1. VCC (5V) → Resistencia Pull-Up (10kΩ) → Entrada del microcontrolador</p>
+                    <p>2. Botón conectado entre la entrada y tierra</p>
+                    <p>3. Cuando el botón NO está presionado: Entrada = 1 (5V)</p>
+                    <p>4. Cuando el botón SÍ está presionado: Entrada = 0 (0V)</p>
+                </div>
+
+                <div class="circuit-diagram">
+                    <p>🔲 VCC ─── [10kΩ] ─── • ─── Entrada MCU<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[SW]<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GND</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔧 Selección de Valores de Resistencia</h3>
+                <p>Elegir el valor correcto de resistencia es crucial para el funcionamiento del circuito:</p>
+                
+                <div class="highlight">
+                    <h4>Consideraciones para Pull-Up/Pull-Down:</h4>
+                    <ul>
+                        <li><strong>Muy baja resistencia:</strong> Consume mucha corriente, puede dañar componentes</li>
+                        <li><strong>Muy alta resistencia:</strong> Puede no proporcionar suficiente corriente, entrada "flotante"</li>
+                        <li><strong>Valor óptimo:</strong> 4.7kΩ - 10kΩ para la mayoría de aplicaciones</li>
+                        <li><strong>Para alta velocidad:</strong> Usar valores más bajos (1kΩ - 2.2kΩ)</li>
+                        <li><strong>Para bajo consumo:</strong> Usar valores más altos (10kΩ - 100kΩ)</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h5>Valores Comerciales Comunes:</h5>
+                    <p><strong>Serie E12 (10% tolerancia):</strong></p>
+                    <p>1.0kΩ, 1.2kΩ, 1.5kΩ, 1.8kΩ, 2.2kΩ, 2.7kΩ, 3.3kΩ, 3.9kΩ, 4.7kΩ, 5.6kΩ, 6.8kΩ, 8.2kΩ, 10kΩ</p>
+                    <p><strong>Recomendación:</strong> Usar 4.7kΩ o 10kΩ para la mayoría de proyectos</p>
+                </div>
+
+                <div class="example-box">
+                    <h5>Cálculo de Corriente:</h5>
+                    <p>Con una resistencia pull-up de 4.7kΩ y VCC de 5V:</p>
+                    <p><strong>I = V ÷ R = 5V ÷ 4700Ω = 1.06mA</strong></p>
+                    <p><em>Esta corriente es segura para la mayoría de microcontroladores</em></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⚠️ Problemas Comunes y Soluciones</h3>
+                
+                <div class="highlight">
+                    <h4>Problema 1: Entrada Flotante</h4>
+                    <p><strong>Síntomas:</strong> Lecturas aleatorias, comportamiento impredecible</p>
+                    <p><strong>Causa:</strong> Entrada sin pull-up o pull-down</p>
+                    <p><strong>Solución:</strong> Agregar resistencia pull-up o pull-down apropiada</p>
+                </div>
+
+                <div class="highlight">
+                    <h4>Problema 2: Resistencia Muy Baja</h4>
+                    <p><strong>Síntomas:</strong> Consumo excesivo de corriente, calentamiento</p>
+                    <p><strong>Causa:</strong> Resistencia de 100Ω o menos</p>
+                    <p><strong>Solución:</strong> Usar resistencia de 1kΩ o mayor</p>
+                </div>
+
+                <div class="highlight">
+                    <h4>Problema 3: Resistencia Muy Alta</h4>
+                    <p><strong>Síntomas:</strong> Señales débiles, susceptibilidad al ruido</p>
+                    <p><strong>Causa:</strong> Resistencia de 100kΩ o mayor</p>
+                    <p><strong>Solución:</strong> Usar resistencia de 10kΩ o menor</p>
+                </div>
+
+                <div class="example-box">
+                    <h5>Consejo de Depuración:</h5>
+                    <p>Si tu circuito no funciona como esperas:</p>
+                    <ol>
+                        <li>Verifica que todas las entradas tengan pull-up o pull-down</li>
+                        <li>Mide el voltaje en las entradas con un multímetro</li>
+                        <li>Confirma que los valores de resistencia sean apropiados</li>
+                        <li>Revisa las conexiones de alimentación (VCC y GND)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicios -->
+        <div id="ejercicios" class="content-section">
+            <div class="card">
+                <h3>📝 Ejercicios Prácticos</h3>
+                
+                <div class="example-box">
+                    <h5>Ejercicio 1: Cálculo básico con Ley de Ohm</h5>
+                    <p><strong>Problema:</strong> Tenemos un LED que requiere 20mA de corriente y tiene una caída de voltaje de 2V. Si alimentamos con 5V, ¿qué resistencia necesitamos?</p>
+                    <p><strong>Solución:</strong></p>
+                    <p>V_resistencia = V_total - V_led = 5V - 2V = 3V</p>
+                    <p>R = V / I = 3V / 0.02A = 150Ω</p>
+                </div>
+
+                <div class="example-box">
+                    <h5>Ejercicio 2: Diseño de circuito lógico</h5>
+                    <p><strong>Problema:</strong> Diseña un circuito que encienda un LED solo cuando dos interruptores estén activados simultáneamente.</p>
+                    <p><strong>Solución:</strong> Utilizar una compuerta AND con resistencias pull-up en las entradas.</p>
+                </div>
+
+                <div class="example-box">
+                    <h5>Ejercicio 3: Selección de resistencia pull-up</h5>
+                    <p><strong>Problema:</strong> Para un microcontrolador que opera a 3.3V con una corriente máxima de entrada de 1mA, calcula la resistencia pull-up mínima.</p>
+                    <p><strong>Solución:</strong> R_min = V / I = 3.3V / 0.001A = 3.3kΩ (usar 4.7kΩ estándar)</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Simulador de Compuertas Lógicas</h3>
+                <div class="calculator">
+                    <h4>Prueba diferentes combinaciones:</h4>
+                    
+                    <div class="input-group">
+                        <label>Entrada A:</label>
+                        <select id="inputA">
+                            <option value="0">0 (Bajo)</option>
+                            <option value="1">1 (Alto)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Entrada B:</label>
+                        <select id="inputB">
+                            <option value="0">0 (Bajo)</option>
+                            <option value="1">1 (Alto)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Operación:</label>
+                        <select id="operation">
+                            <option value="and">AND</option>
+                            <option value="or">OR</option>
+                            <option value="nand">NAND</option>
+                            <option value="nor">NOR</option>
+                            <option value="xor">XOR</option>
+                        </select>
+                    </div>
+                    
+                    <button class="calculate-btn" onclick="simulateLogic()">Simular</button>
+                    
+                    <div id="logicResult" class="result" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover clase active de todos los botones
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activar el botón correspondiente
+            event.target.classList.add('active');
+        }
+
+        function calculateOhm() {
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const current = parseFloat(document.getElementById('current').value) / 1000; // Convertir mA a A
+            const resistance = parseFloat(document.getElementById('resistance').value);
+            
+            let result = '';
+            
+            if (voltage && current && !resistance) {
+                const r = voltage / current;
+                result = `Resistencia calculada: ${r.toFixed(2)} Ω`;
+            } else if (voltage && resistance && !current) {
+                const i = (voltage / resistance) * 1000; // Convertir a mA
+                result = `Corriente calculada: ${i.toFixed(2)} mA`;
+            } else if (current && resistance && !voltage) {
+                const v = (current / 1000) * resistance;
+                result = `Voltaje calculado: ${v.toFixed(2)} V`;
+            } else {
+                result = 'Por favor, ingresa exactamente dos valores y deja uno vacío.';
+            }
+            
+            const resultDiv = document.getElementById('ohmResult');
+            resultDiv.textContent = result;
+            resultDiv.style.display = 'block';
+        }
+
+        function calculatePullUp() {
+            const vcc = parseFloat(document.getElementById('vcc').value);
+            const vol = parseFloat(document.getElementById('vol').value);
+            const iol = parseFloat(document.getElementById('iol').value) / 1000; // Convertir mA a A
+            
+            if (vcc && vol !== undefined && iol) {
+                const resistance = (vcc - vol) / iol;
+                const resultDiv = document.getElementById('pullupResult');
+                resultDiv.innerHTML = `
+                    <h5>Resultado del cálculo:</h5>
+                    <p><strong>Resistencia Pull-Up calculada:</strong> ${resistance.toFixed(0)} Ω</p>
+                    <p><strong>Valor comercial recomendado:</strong> ${getStandardResistor(resistance)} Ω</p>
+                    <p><strong>Potencia disipada:</strong> ${(Math.pow(vcc - vol, 2) / resistance * 1000).toFixed(2)} mW</p>
+                `;
+                resultDiv.style.display = 'block';
+            } else {
+                const resultDiv = document.getElementById('pullupResult');
+                resultDiv.textContent = 'Por favor, completa todos los campos.';
+                resultDiv.style.display = 'block';
+            }
+        }
+
+        function getStandardResistor(value) {
+            const standardValues = [1000, 1200, 1500, 1800, 2200, 2700, 3300, 3900, 4700, 5600, 6800, 8200, 10000];
+            return standardValues.find(std => std >= value) || standardValues[standardValues.length - 1];
+        }
+
+        function simulateLogic() {
+            const a = parseInt(document.getElementById('inputA').value);
+            const b = parseInt(document.getElementById('inputB').value);
+            const operation = document.getElementById('operation').value;
+            
+            let result;
+            let explanation;
+            
+            switch(operation) {
+                case 'and':
+                    result = a & b;
+                    explanation = `${a} AND ${b} = ${result}`;
+                    break;
+                case 'or':
+                    result = a | b;
+                    explanation = `${a} OR ${b} = ${result}`;
+                    break;
+                case 'nand':
+                    result = !(a & b) ? 1 : 0;
+                    explanation = `${a} NAND ${b} = ${result}`;
+                    break;
+                case 'nor':
+                    result = !(a | b) ? 1 : 0;
+                    explanation = `${a} NOR ${b} = ${result}`;
+                    break;
+                case 'xor':
+                    result = a ^ b;
+                    explanation = `${a} XOR ${b} = ${result}`;
+                    break;
+            }
+            
+            const resultDiv = document.getElementById('logicResult');
+            resultDiv.innerHTML = `
+                <h5>Resultado de la simulación:</h5>
+                <p><strong>${explanation}</strong></p>
+                <p>Estado de salida: <strong>${result === 1 ? 'ALTO (1)' : 'BAJO (0)'}</strong></p>
+                <p>Voltaje aproximado: <strong>${result === 1 ? '5V' : '0V'}</strong></p>
+            `;
+            resultDiv.style.display = 'block';
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Añadir algunos efectos de entrada
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
